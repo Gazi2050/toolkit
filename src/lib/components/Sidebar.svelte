@@ -19,67 +19,28 @@
 	} from '@lucide/svelte';
 
 	const menuItems = [
-		{
-			title: 'Home',
-			items: [{ title: 'Home', href: '/', icon: Home }]
-		},
-		{
-			title: 'Text & Content',
-			items: [
-				{ title: 'JSON Viewer', href: '/json-viewer', icon: FileJson },
-				{ title: 'Text Compare', href: '/text-compare', icon: GitCompare },
-				{ title: 'Case Converter', href: '/case-converter', icon: CaseSensitive },
-				{ title: 'Token Counter', href: '/token-counter', icon: Hash },
-				{ title: 'Markdown', href: '/markdown', icon: FileText }
-			]
-		},
-		{
-			title: 'Encoding & Conversion',
-			items: [
-				{ title: 'Base64 Converter', href: '/base64', icon: Lock },
-				{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
-				{ title: 'Number Base', href: '/number-base', icon: Binary },
-				{ title: 'CSV to JSON', href: '/csv-json', icon: Database },
-				{ title: 'Image Format', href: '/image-format', icon: Image }
-			]
-		},
-		{
-			title: 'Generators & Utilities',
-			items: [
-				{ title: 'UUID Generator', href: '/uuid', icon: Hash },
-				{ title: 'QR Code', href: '/qr-code', icon: QrCode },
-				{ title: 'Hash Generator', href: '/hash', icon: Lock },
-				{ title: 'Lorem Generator', href: '/lorem', icon: Type },
-				{ title: 'Timestamp', href: '/timestamp', icon: Clock }
-			]
-		}
+		{ title: 'JSON Viewer', href: '/json-viewer', icon: FileJson },
+		{ title: 'Text Compare', href: '/text-compare', icon: GitCompare },
+		{ title: 'Text Encryption', href: '/text-encryption', icon: Lock }
 	];
 </script>
 
 <aside class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r bg-card transition-transform sm:translate-x-0 {$$props.class || ''}">
-	<div class="no-scrollbar flex h-full flex-col overflow-y-auto px-3 py-4">
-		<a href="/" class="mb-5 flex items-center ps-2.5">
-			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">DevTools</span>
+	<div class="flex h-full flex-col overflow-y-auto px-3 py-4">
+		<a href="/" class="mb-5 flex items-center gap-2 px-2">
+			<div class="text-gradient text-xl font-bold">ToolKit</div>
 		</a>
-		<ul class="space-y-2 font-medium">
-			{#each menuItems as group}
-				{#if group.title !== 'Home'}
-					<li class="mt-4 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-						{group.title}
-					</li>
-				{/if}
-				{#each group.items as item}
-					<li>
-						<a
-							href={item.href}
-							class="group flex items-center rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-all hover:bg-muted hover:text-foreground {$page.url.pathname === item.href ? 'bg-muted text-foreground' : ''}"
-						>
-							<item.icon class="mr-3 h-4 w-4 flex-shrink-0 transition-colors group-hover:text-foreground {$page.url.pathname === item.href ? 'text-foreground' : ''}" />
-							<span>{item.title}</span>
-						</a>
-					</li>
-				{/each}
+
+		<nav class="flex-1 space-y-1">
+			{#each menuItems as item}
+				<a
+					href={item.href}
+					class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground {$page.url.pathname === item.href ? 'bg-accent text-accent-foreground' : 'text-muted-foreground'}"
+				>
+					<svelte:component this={item.icon} class="h-4 w-4" />
+					<span>{item.title}</span>
+				</a>
 			{/each}
-		</ul>
+		</nav>
 	</div>
 </aside>

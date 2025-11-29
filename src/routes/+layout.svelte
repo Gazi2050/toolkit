@@ -30,7 +30,7 @@
 		>
 			<Menu class="h-5 w-5" />
 		</button>
-		<span class="text-lg font-semibold">DevTools</span>
+		<span class="text-lg font-semibold">ToolKit</span>
 		<ThemeToggle />
 	</div>
 
