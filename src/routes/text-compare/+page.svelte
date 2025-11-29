@@ -3,7 +3,7 @@
 	import { GitCompare } from '@lucide/svelte';
 </script>
 
-<div class="flex h-full flex-col">
+<div class="flex flex-col">
 	<div class="mb-6 flex items-center gap-3 border-b pb-4">
 		<div class="rounded-lg bg-primary/10 p-2 text-primary">
 			<GitCompare class="h-6 w-6" />

@@ -3,7 +3,6 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 	import { Menu } from '@lucide/svelte';
-	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 	
 	let { children } = $props();
@@ -24,10 +23,13 @@
 <div class="min-h-screen bg-background font-sans antialiased">
 	<!-- Mobile Header -->
 	<div class="sticky top-0 z-50 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:hidden">
-		<Button variant="ghost" size="icon" onclick={toggleSidebar}>
+		<button 
+			onclick={toggleSidebar}
+			class="inline-flex h-9 w-9 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
+			aria-label="Toggle menu"
+		>
 			<Menu class="h-5 w-5" />
-			<span class="sr-only">Toggle menu</span>
-		</Button>
+		</button>
 		<span class="text-lg font-semibold">DevTools</span>
 		<ThemeToggle />
 	</div>

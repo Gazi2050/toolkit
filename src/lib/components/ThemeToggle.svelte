@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Moon, Sun } from '@lucide/svelte';
 	import { onMount } from 'svelte';
-	import { Button } from '$lib/components/ui/button';
 
 	let isDark = true;
 
@@ -31,11 +30,14 @@
 	}
 </script>
 
-<Button variant="ghost" size="icon" onclick={toggleTheme} class="rounded-full">
+<button 
+	onclick={toggleTheme} 
+	class="inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
+	aria-label="Toggle theme"
+>
 	{#if isDark}
 		<Moon class="h-5 w-5 transition-all" />
 	{:else}
 		<Sun class="h-5 w-5 transition-all" />
 	{/if}
-	<span class="sr-only">Toggle theme</span>
-</Button>
+</button>

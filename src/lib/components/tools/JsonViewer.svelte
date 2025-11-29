@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Copy, Trash2, FileJson, Minimize, Maximize } from '@lucide/svelte';
-	import { Button } from '$lib/components/ui/button';
 	
 	let input = $state('');
 	let output = $state('');
@@ -104,14 +103,20 @@
 
 <div class="flex flex-col gap-4">
 	<div class="flex gap-2">
-		<Button onclick={formatJSON}>
-			<Maximize class="mr-2 h-4 w-4" />
+		<button 
+			onclick={formatJSON}
+			class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-1 focus:ring-primary/30"
+		>
+			<Maximize class="h-4 w-4" />
 			Format
-		</Button>
-		<Button variant="outline" onclick={minifyJSON}>
-			<Minimize class="mr-2 h-4 w-4" />
+		</button>
+		<button 
+			onclick={minifyJSON}
+			class="inline-flex items-center justify-center gap-2 rounded-md border bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
+		>
+			<Minimize class="h-4 w-4" />
 			Minify
-		</Button>
+		</button>
 	</div>
 
 	<div class="grid h-[calc(100vh-18rem)] gap-4 lg:grid-cols-2">
