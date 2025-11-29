@@ -26,9 +26,6 @@ Here are the tools currently available on the platform:
 - **Number Base Converter**  
   Convert numbers between different bases: binary, octal, decimal, hexadecimal, or custom bases.
 
-- **Image Converter**  
-  Convert images to different formats such as PNG, JPG, and more.
-
 - **Regex Generator & Tester**  
   Create, test, and validate regular expressions with real-time feedback.
 
