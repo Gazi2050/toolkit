@@ -10,7 +10,9 @@
 		</div>
 		<div>
 			<h1 class="text-2xl font-bold tracking-tight">Text Encoder & Decoder</h1>
-			<p class="text-sm text-muted-foreground">Encode and decode text using Base64, Base32, and Base16 (Hex).</p>
+			<p class="text-sm text-muted-foreground">
+				Encode and decode text using Base64, Base32, and Base16 (Hex).
+			</p>
 		</div>
 	</div>
 

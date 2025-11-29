@@ -10,7 +10,9 @@
 		</div>
 		<div>
 			<h1 class="text-2xl font-bold tracking-tight">Text Compare</h1>
-			<p class="text-sm text-muted-foreground">Compare two blocks of text and highlight the differences.</p>
+			<p class="text-sm text-muted-foreground">
+				Compare two blocks of text and highlight the differences.
+			</p>
 		</div>
 	</div>
 

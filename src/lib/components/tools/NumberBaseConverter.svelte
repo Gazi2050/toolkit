@@ -17,7 +17,7 @@
 	 */
 	function isValidForBase(value: string, base: number): boolean {
 		if (!value) return true;
-		
+
 		const validChars = {
 			2: /^[01]+$/,
 			8: /^[0-7]+$/,
@@ -118,9 +118,16 @@
 					<option value={8}>Octal</option>
 					<option value={16}>Hexadecimal</option>
 				</select>
-				<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
+				<div
+					class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground"
+				>
 					<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M19 9l-7 7-7-7"
+						/>
 					</svg>
 				</div>
 			</div>
@@ -149,7 +156,9 @@
 			id="input-number"
 			type="text"
 			bind:value={inputValue}
-			class="rounded-lg border bg-muted/50 px-4 py-3 font-mono text-lg transition-colors focus:outline-none focus:ring-1 focus:ring-primary/30 {error ? 'border-red-500/50 focus:ring-red-500/30' : ''}"
+			class="rounded-lg border bg-muted/50 px-4 py-3 font-mono text-lg transition-colors focus:outline-none focus:ring-1 focus:ring-primary/30 {error
+				? 'border-red-500/50 focus:ring-red-500/30'
+				: ''}"
 			placeholder="Enter number..."
 		/>
 		{#if error}
@@ -173,7 +182,11 @@
 					<Copy class="h-4 w-4" />
 				</button>
 			</div>
-			<div class="break-all font-mono text-lg font-semibold {binary ? 'text-foreground' : 'text-muted-foreground'}">
+			<div
+				class="break-all font-mono text-lg font-semibold {binary
+					? 'text-foreground'
+					: 'text-muted-foreground'}"
+			>
 				{binary || '—'}
 			</div>
 		</div>
@@ -193,7 +206,11 @@
 					<Copy class="h-4 w-4" />
 				</button>
 			</div>
-			<div class="break-all font-mono text-lg font-semibold {octal ? 'text-foreground' : 'text-muted-foreground'}">
+			<div
+				class="break-all font-mono text-lg font-semibold {octal
+					? 'text-foreground'
+					: 'text-muted-foreground'}"
+			>
 				{octal || '—'}
 			</div>
 		</div>
@@ -213,7 +230,11 @@
 					<Copy class="h-4 w-4" />
 				</button>
 			</div>
-			<div class="break-all font-mono text-lg font-semibold {decimal ? 'text-foreground' : 'text-muted-foreground'}">
+			<div
+				class="break-all font-mono text-lg font-semibold {decimal
+					? 'text-foreground'
+					: 'text-muted-foreground'}"
+			>
 				{decimal || '—'}
 			</div>
 		</div>
@@ -233,7 +254,11 @@
 					<Copy class="h-4 w-4" />
 				</button>
 			</div>
-			<div class="break-all font-mono text-lg font-semibold {hexadecimal ? 'text-foreground' : 'text-muted-foreground'}">
+			<div
+				class="break-all font-mono text-lg font-semibold {hexadecimal
+					? 'text-foreground'
+					: 'text-muted-foreground'}"
+			>
 				{hexadecimal || '—'}
 			</div>
 		</div>

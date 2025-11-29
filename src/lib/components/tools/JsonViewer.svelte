@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { Copy, Trash2, FileJson, Minimize, Maximize } from '@lucide/svelte';
-	
+	import { Copy, Maximize, Minimize } from '@lucide/svelte';
+
 	let input = $state('');
 	let output = $state('');
-	let error = $state<{ message: string; line?: number; column?: number; snippet?: string } | null>(null);
-	let mode: 'format' | 'minify' = $state('format');
-	
+	let error = $state<{ message: string; line?: number; column?: number; snippet?: string } | null>(
+		null
+	);
+
 	let inputElement = $state<HTMLTextAreaElement | null>(null);
 	let inputLinesElement = $state<HTMLDivElement | null>(null);
 	let outputElement = $state<HTMLPreElement | null>(null);
@@ -32,11 +33,14 @@
 			const linesAll = json.split('\n');
 			const startLine = Math.max(0, line - 2);
 			const endLine = Math.min(linesAll.length, line + 1);
-			snippet = linesAll.slice(startLine, endLine).map((l, i) => {
-				const currentLine = startLine + i + 1;
-				const isErrorLine = currentLine === line;
-				return `${isErrorLine ? '>' : ' '} ${currentLine} | ${l}`;
-			}).join('\n');
+			snippet = linesAll
+				.slice(startLine, endLine)
+				.map((l, i) => {
+					const currentLine = startLine + i + 1;
+					const isErrorLine = currentLine === line;
+					return `${isErrorLine ? '>' : ' '} ${currentLine} | ${l}`;
+				})
+				.join('\n');
 		}
 
 		return { message: msg, line, column, snippet };
@@ -55,7 +59,6 @@
 			const parsed = JSON.parse(input);
 			output = JSON.stringify(parsed, null, 2);
 			error = null;
-			mode = 'format';
 		} catch (e) {
 			error = getErrorDetails(e as Error, input);
 			output = '';
@@ -75,7 +78,6 @@
 			const parsed = JSON.parse(input);
 			output = JSON.stringify(parsed);
 			error = null;
-			mode = 'minify';
 		} catch (e) {
 			error = getErrorDetails(e as Error, input);
 			output = '';
@@ -124,14 +126,14 @@
 
 <div class="flex flex-col gap-4">
 	<div class="flex gap-2">
-		<button 
+		<button
 			onclick={formatJSON}
 			class="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-1 focus:ring-primary/30"
 		>
 			<Maximize class="h-4 w-4" />
 			Format
 		</button>
-		<button 
+		<button
 			onclick={minifyJSON}
 			class="inline-flex items-center justify-center gap-2 rounded-md border bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
 		>
@@ -150,13 +152,17 @@
 					</button>
 				</div>
 			</div>
-			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30 {error ? 'border-red-500/50 focus-within:ring-red-500/30' : ''}">
+			<div
+				class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30 {error
+					? 'border-red-500/50 focus-within:ring-red-500/30'
+					: ''}"
+			>
 				<div
 					bind:this={inputLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
 					style="width: 3rem;"
 				>
-					{#each inputLineNumbers as line}
+					{#each inputLineNumbers as line (line)}
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
@@ -207,15 +213,14 @@
 						class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
 						style="width: 3rem;"
 					>
-						{#each outputLineNumbers as line}
+						{#each outputLineNumbers as line (line)}
 							<div class="px-2">{line}</div>
 						{/each}
 					</div>
 					<pre
 						bind:this={outputElement}
 						onscroll={handleOutputScroll}
-						class="custom-scrollbar h-full flex-1 overflow-auto bg-transparent p-4 font-mono text-sm text-green-400 whitespace-pre"
-					>{output}</pre>
+						class="custom-scrollbar h-full flex-1 overflow-auto bg-transparent p-4 font-mono text-sm text-green-400 whitespace-pre">{output}</pre>
 				{/if}
 			</div>
 		</div>

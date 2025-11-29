@@ -28,7 +28,9 @@
 			</p>
 
 			<div class="mb-12 flex items-center justify-center">
-				<div class="flex items-center gap-2 rounded-full border-2 border-primary/20 bg-primary/5 px-5 py-2.5 text-sm font-semibold shadow-sm transition-all hover:border-primary/30 hover:bg-primary/10">
+				<div
+					class="flex items-center gap-2 rounded-full border-2 border-primary/20 bg-primary/5 px-5 py-2.5 text-sm font-semibold shadow-sm transition-all hover:border-primary/30 hover:bg-primary/10"
+				>
 					<Zap class="h-4 w-4 text-primary" />
 					<span>{TOOLS.length} Tools Available</span>
 				</div>
@@ -40,7 +42,7 @@
 		<div class="mx-auto max-w-7xl">
 			<h2 class="mb-8 text-center text-2xl font-semibold">Available Tools</h2>
 			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				{#each TOOLS as tool}
+				{#each TOOLS as tool (tool.href)}
 					<ToolCard {...tool} />
 				{/each}
 			</div>

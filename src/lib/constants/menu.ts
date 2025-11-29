@@ -1,21 +1,14 @@
-import {
-    FileJson,
-    GitCompare,
-    Lock,
-    Binary,
-    Code2,
-    ScanText
-} from '@lucide/svelte';
+import { FileJson, GitCompare, Lock, Binary, Code2, ScanText } from '@lucide/svelte';
 import type { MenuItem } from '$lib/types';
 
 /**
  * Navigation menu items for the sidebar
  */
 export const MENU_ITEMS: MenuItem[] = [
-    { title: 'JSON Viewer', href: '/json-viewer', icon: FileJson },
-    { title: 'Text Compare', href: '/text-compare', icon: GitCompare },
-    { title: 'Text Encryption', href: '/text-encryption', icon: Lock },
-    { title: 'Number Base Converter', href: '/number-base', icon: Binary },
-    { title: 'Regex Tester', href: '/regex-tester', icon: Code2 },
-    { title: 'Text Extractor', href: '/text-extractor', icon: ScanText }
+	{ title: 'JSON Viewer', href: '/json-viewer', icon: FileJson },
+	{ title: 'Text Compare', href: '/text-compare', icon: GitCompare },
+	{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
+	{ title: 'Number Base Converter', href: '/number-base', icon: Binary },
+	{ title: 'Regex Tester', href: '/regex-tester', icon: Code2 },
+	{ title: 'Text Extractor', href: '/text-extractor', icon: ScanText }
 ];

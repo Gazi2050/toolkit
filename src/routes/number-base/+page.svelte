@@ -10,7 +10,9 @@
 		</div>
 		<div>
 			<h1 class="text-2xl font-bold tracking-tight">Number Base Converter</h1>
-			<p class="text-sm text-muted-foreground">Convert numbers between binary, octal, decimal, hexadecimal, or custom bases.</p>
+			<p class="text-sm text-muted-foreground">
+				Convert numbers between binary, octal, decimal, hexadecimal, or custom bases.
+			</p>
 		</div>
 	</div>
 

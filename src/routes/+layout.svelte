@@ -25,8 +25,10 @@
 
 <div class="min-h-screen bg-background font-sans antialiased">
 	{#if !isHomePage}
-		<div class="sticky top-0 z-50 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:hidden">
-			<button 
+		<div
+			class="sticky top-0 z-50 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:hidden"
+		>
+			<button
 				onclick={toggleSidebar}
 				class="inline-flex h-9 w-9 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
 				aria-label="Toggle menu"
@@ -38,9 +40,9 @@
 		</div>
 
 		{#if isSidebarOpen}
-			<div 
+			<div
 				class="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm sm:hidden"
-				onclick={() => isSidebarOpen = false}
+				onclick={() => (isSidebarOpen = false)}
 				role="button"
 				tabindex="0"
 				onkeydown={(e) => e.key === 'Escape' && (isSidebarOpen = false)}
@@ -49,7 +51,7 @@
 
 		<Sidebar class={isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} />
 	{/if}
-	
+
 	<main class="p-4 {isHomePage ? '' : 'sm:ml-64'}">
 		<div class="mx-auto max-w-7xl p-4">
 			{#if !isHomePage}

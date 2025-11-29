@@ -24,13 +24,13 @@
 		for (const byte of bytes) {
 			bits += byte.toString(2).padStart(8, '0');
 		}
-		
+
 		let result = '';
 		for (let i = 0; i < bits.length; i += 5) {
 			const chunk = bits.slice(i, i + 5).padEnd(5, '0');
 			result += BASE32_ALPHABET[parseInt(chunk, 2)];
 		}
-		
+
 		while (result.length % 8 !== 0) {
 			result += '=';
 		}
@@ -44,20 +44,20 @@
 	function base32Decode(str: string): string {
 		str = str.toUpperCase().replace(/=+$/, '');
 		let bits = '';
-		
+
 		for (const char of str) {
 			const index = BASE32_ALPHABET.indexOf(char);
 			if (index === -1) throw new Error(`Invalid Base32 character: '${char}'`);
 			bits += index.toString(2).padStart(5, '0');
 		}
-		
+
 		const bytes: number[] = [];
 		for (let i = 0; i < bits.length; i += 8) {
 			if (i + 8 <= bits.length) {
 				bytes.push(parseInt(bits.slice(i, i + 8), 2));
 			}
 		}
-		
+
 		return new TextDecoder().decode(new Uint8Array(bytes));
 	}
 
@@ -67,7 +67,7 @@
 	 */
 	function hexEncode(str: string): string {
 		return Array.from(new TextEncoder().encode(str))
-			.map(byte => byte.toString(16).padStart(2, '0'))
+			.map((byte) => byte.toString(16).padStart(2, '0'))
 			.join('');
 	}
 
@@ -80,7 +80,7 @@
 		if (hex.length % 2 !== 0) {
 			throw new Error('Invalid hex string: length must be even');
 		}
-		
+
 		const bytes: number[] = [];
 		for (let i = 0; i < hex.length; i += 2) {
 			const byte = parseInt(hex.slice(i, i + 2), 16);
@@ -121,7 +121,9 @@
 						try {
 							output = atob(input.trim());
 						} catch {
-							throw new Error('Invalid Base64 string. Check for invalid characters or incorrect padding.');
+							throw new Error(
+								'Invalid Base64 string. Check for invalid characters or incorrect padding.'
+							);
 						}
 						break;
 					case 'base16':
@@ -201,13 +203,17 @@
 	<div class="flex flex-wrap items-center gap-3">
 		<div class="flex rounded-md border bg-muted/50 p-1">
 			<button
-				class="rounded px-3 py-1.5 text-sm font-medium transition-colors {mode === 'encode' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}"
+				class="rounded px-3 py-1.5 text-sm font-medium transition-colors {mode === 'encode'
+					? 'bg-background shadow-sm'
+					: 'text-muted-foreground hover:text-foreground'}"
 				onclick={() => (mode = 'encode')}
 			>
 				Encode
 			</button>
 			<button
-				class="rounded px-3 py-1.5 text-sm font-medium transition-colors {mode === 'decode' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}"
+				class="rounded px-3 py-1.5 text-sm font-medium transition-colors {mode === 'decode'
+					? 'bg-background shadow-sm'
+					: 'text-muted-foreground hover:text-foreground'}"
 				onclick={() => (mode = 'decode')}
 			>
 				Decode
@@ -223,9 +229,16 @@
 				<option value="base32">Base32</option>
 				<option value="base16">Base16 (Hex)</option>
 			</select>
-			<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
+			<div
+				class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground"
+			>
 				<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M19 9l-7 7-7-7"
+					/>
 				</svg>
 			</div>
 		</div>
@@ -253,13 +266,15 @@
 			<label for="input-text" class="text-sm font-medium text-muted-foreground">
 				Input {mode === 'encode' ? '(Plain Text)' : '(Encoded Text)'}
 			</label>
-			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30">
+			<div
+				class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30"
+			>
 				<div
 					bind:this={inputLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
 					style="width: 3rem;"
 				>
-					{#each inputLineNumbers as line}
+					{#each inputLineNumbers as line (line)}
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
@@ -305,15 +320,14 @@
 						class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
 						style="width: 3rem;"
 					>
-						{#each outputLineNumbers as line}
+						{#each outputLineNumbers as line (line)}
 							<div class="px-2">{line}</div>
 						{/each}
 					</div>
 					<pre
 						bind:this={outputElement}
 						onscroll={handleOutputScroll}
-						class="custom-scrollbar h-full flex-1 overflow-auto bg-transparent p-4 font-mono text-sm text-green-400 whitespace-pre"
-					>{output}</pre>
+						class="custom-scrollbar h-full flex-1 overflow-auto bg-transparent p-4 font-mono text-sm text-green-400 whitespace-pre">{output}</pre>
 				{/if}
 			</div>
 		</div>

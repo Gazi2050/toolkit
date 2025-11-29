@@ -10,7 +10,9 @@
 		</div>
 		<div>
 			<h1 class="text-2xl font-bold tracking-tight">Regex Generator & Tester</h1>
-			<p class="text-sm text-muted-foreground">Create, test, and validate regular expressions with real-time feedback.</p>
+			<p class="text-sm text-muted-foreground">
+				Create, test, and validate regular expressions with real-time feedback.
+			</p>
 		</div>
 	</div>
 

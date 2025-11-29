@@ -45,7 +45,7 @@
 	function handleDrop(e: DragEvent): void {
 		e.preventDefault();
 		isDragging = false;
-		
+
 		if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
 			handleFile(e.dataTransfer.files[0]);
 		}
@@ -70,7 +70,7 @@
 		const isPdf = newFile.type === 'application/pdf';
 
 		if (!isImage && !isPdf) {
-			error = "Supported formats: PNG, JPG, WEBP, PDF";
+			error = 'Supported formats: PNG, JPG, WEBP, PDF';
 			return;
 		}
 
@@ -101,7 +101,7 @@
 			const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 			const page = await pdf.getPage(1);
 			const viewport = page.getViewport({ scale: 1.0 });
-			
+
 			const canvas = document.createElement('canvas');
 			const context = canvas.getContext('2d');
 			canvas.height = viewport.height;
@@ -115,7 +115,7 @@
 				previewUrl = canvas.toDataURL();
 			}
 		} catch (e) {
-			console.error("Failed to render PDF preview", e);
+			console.error('Failed to render PDF preview', e);
 		}
 	}
 
@@ -137,7 +137,7 @@
 				const numPages = pdf.numPages;
 
 				const worker = await Tesseract.createWorker('eng', 1, {
-					logger: m => {}
+					logger: () => {}
 				});
 
 				for (let i = 1; i <= numPages; i++) {
@@ -146,7 +146,7 @@
 
 					const page = await pdf.getPage(i);
 					const viewport = page.getViewport({ scale: 2.0 });
-					
+
 					const canvas = document.createElement('canvas');
 					const context = canvas.getContext('2d');
 					canvas.height = viewport.height;
@@ -157,7 +157,9 @@
 							canvas: canvas,
 							viewport: viewport
 						}).promise;
-						const { data: { text } } = await worker.recognize(canvas);
+						const {
+							data: { text }
+						} = await worker.recognize(canvas);
 						extractedText += `--- Page ${i} ---\n${text}\n\n`;
 					}
 				}
@@ -166,7 +168,7 @@
 				status = 'Completed';
 			} else {
 				const worker = await Tesseract.createWorker('eng', 1, {
-					logger: m => {
+					logger: (m) => {
 						if (m.status === 'recognizing text') {
 							progress = Math.round(m.progress * 100);
 							status = `Recognizing text... ${progress}%`;
@@ -175,14 +177,16 @@
 						}
 					}
 				});
-				
-				const { data: { text } } = await worker.recognize(file);
+
+				const {
+					data: { text }
+				} = await worker.recognize(file);
 				extractedText = text;
 				await worker.terminate();
 			}
 		} catch (e) {
 			console.error(e);
-			error = "Failed to extract text. Please try another file.";
+			error = 'Failed to extract text. Please try another file.';
 		} finally {
 			isProcessing = false;
 			status = '';
@@ -216,7 +220,9 @@
 		<div
 			role="button"
 			tabindex="0"
-			class="relative flex min-h-[200px] flex-1 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 bg-muted/50 p-6 transition-colors hover:bg-muted/80 {isDragging ? 'border-primary bg-primary/5' : ''}"
+			class="relative flex min-h-[200px] flex-1 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 bg-muted/50 p-6 transition-colors hover:bg-muted/80 {isDragging
+				? 'border-primary bg-primary/5'
+				: ''}"
 			ondragover={handleDragOver}
 			ondragleave={handleDragLeave}
 			ondrop={handleDrop}
@@ -230,17 +236,13 @@
 				class="hidden"
 				onchange={handleFileInput}
 			/>
-			
+
 			<div class="flex flex-col items-center gap-2 text-center">
 				<div class="rounded-full bg-background p-4 shadow-sm">
 					<Upload class="h-8 w-8 text-muted-foreground" />
 				</div>
-				<div class="mt-2 text-lg font-medium">
-					Drop an image or PDF here or click to upload
-				</div>
-				<p class="text-sm text-muted-foreground">
-					Supports PNG, JPG, WEBP, PDF
-				</p>
+				<div class="mt-2 text-lg font-medium">Drop an image or PDF here or click to upload</div>
+				<p class="text-sm text-muted-foreground">Supports PNG, JPG, WEBP, PDF</p>
 			</div>
 		</div>
 	{:else}
@@ -258,20 +260,25 @@
 						</div>
 					{/if}
 					{#if isProcessing}
-						<div class="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm">
+						<div
+							class="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm"
+						>
 							<div class="flex flex-col items-center gap-3 rounded-lg bg-background p-6 shadow-lg">
 								<Loader2 class="h-8 w-8 animate-spin text-primary" />
 								<div class="text-sm font-medium">{status || 'Processing...'}</div>
 								{#if progress > 0}
 									<div class="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
-										<div class="h-full bg-primary transition-all duration-300" style="width: {progress}%"></div>
+										<div
+											class="h-full bg-primary transition-all duration-300"
+											style="width: {progress}%"
+										></div>
 									</div>
 								{/if}
 							</div>
 						</div>
 					{/if}
 				</div>
-				
+
 				<div class="flex gap-2">
 					<button
 						onclick={extractText}
@@ -294,7 +301,9 @@
 
 			<div class="flex min-h-0 flex-col gap-2">
 				<div class="flex items-center justify-between">
-					<label for="extracted-text" class="text-sm font-medium text-muted-foreground">Extracted Text</label>
+					<label for="extracted-text" class="text-sm font-medium text-muted-foreground"
+						>Extracted Text</label
+					>
 					<button
 						onclick={copyText}
 						disabled={!extractedText}
@@ -316,7 +325,9 @@
 	{/if}
 
 	{#if error}
-		<div class="flex items-center gap-2 rounded-md bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400">
+		<div
+			class="flex items-center gap-2 rounded-md bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+		>
 			<AlertCircle class="h-4 w-4" />
 			{error}
 		</div>

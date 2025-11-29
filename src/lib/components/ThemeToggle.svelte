@@ -33,8 +33,8 @@
 	}
 </script>
 
-<button 
-	onclick={toggleTheme} 
+<button
+	onclick={toggleTheme}
 	class="inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
 	aria-label="Toggle theme"
 >

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { diffChars, diffLines, diffWords } from 'diff';
+	import { diffChars, diffLines, diffWords, type Change } from 'diff';
 	import { Trash2 } from '@lucide/svelte';
 
 	let oldText = $state('');
 	let newText = $state('');
-	let diffResult: any[] = $state([]);
+	let diffResult = $state<Change[]>([]);
 	let mode: 'chars' | 'words' | 'lines' = $state('lines');
 
 	let oldTextElement: HTMLTextAreaElement;
@@ -78,10 +78,10 @@
 
 	let oldTextLineNumbers = $derived(oldText.split('\n').map((_, i) => i + 1));
 	let newTextLineNumbers = $derived(newText.split('\n').map((_, i) => i + 1));
-	
+
 	let outputLineCount = $derived(() => {
 		if (diffResult.length === 0) return 1;
-		const text = diffResult.map(p => p.value).join('');
+		const text = diffResult.map((p) => p.value).join('');
 		return text.split('\n').length;
 	});
 	let outputLineNumbers = $derived(Array.from({ length: outputLineCount() }, (_, i) => i + 1));
@@ -92,13 +92,15 @@
 	<div class="flex h-full min-h-0 flex-col gap-4">
 		<div class="flex h-1/2 min-h-0 flex-col gap-2">
 			<label for="original" class="text-sm font-medium text-muted-foreground">Original Text</label>
-			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30">
+			<div
+				class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30"
+			>
 				<div
 					bind:this={oldTextLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
 					style="width: 3rem;"
 				>
-					{#each oldTextLineNumbers as line}
+					{#each oldTextLineNumbers as line (line)}
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
@@ -114,13 +116,15 @@
 		</div>
 		<div class="flex h-1/2 min-h-0 flex-col gap-2">
 			<label for="modified" class="text-sm font-medium text-muted-foreground">Modified Text</label>
-			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30">
+			<div
+				class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30"
+			>
 				<div
 					bind:this={newTextLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
 					style="width: 3rem;"
 				>
-					{#each newTextLineNumbers as line}
+					{#each newTextLineNumbers as line (line)}
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
@@ -143,27 +147,33 @@
 				<span class="text-sm font-medium text-muted-foreground">Differences</span>
 				<div class="flex rounded-md border bg-muted/50 p-1">
 					<button
-						class="rounded px-2 py-0.5 text-xs font-medium transition-colors {mode === 'chars' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}"
+						class="rounded px-2 py-0.5 text-xs font-medium transition-colors {mode === 'chars'
+							? 'bg-background shadow-sm'
+							: 'text-muted-foreground hover:text-foreground'}"
 						onclick={() => (mode = 'chars')}
 					>
 						Chars
 					</button>
 					<button
-						class="rounded px-2 py-0.5 text-xs font-medium transition-colors {mode === 'words' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}"
+						class="rounded px-2 py-0.5 text-xs font-medium transition-colors {mode === 'words'
+							? 'bg-background shadow-sm'
+							: 'text-muted-foreground hover:text-foreground'}"
 						onclick={() => (mode = 'words')}
 					>
 						Words
 					</button>
 					<button
-						class="rounded px-2 py-0.5 text-xs font-medium transition-colors {mode === 'lines' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}"
+						class="rounded px-2 py-0.5 text-xs font-medium transition-colors {mode === 'lines'
+							? 'bg-background shadow-sm'
+							: 'text-muted-foreground hover:text-foreground'}"
 						onclick={() => (mode = 'lines')}
 					>
 						Lines
 					</button>
 				</div>
 			</div>
-			<button 
-				onclick={clear} 
+			<button
+				onclick={clear}
 				class="inline-flex h-8 items-center justify-center gap-2 rounded-md px-3 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
 			>
 				<Trash2 class="h-3 w-3" />
@@ -177,18 +187,22 @@
 				class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
 				style="width: 3rem;"
 			>
-				{#each outputLineNumbers as line}
+				{#each outputLineNumbers as line (line)}
 					<div class="px-2">{line}</div>
 				{/each}
 			</div>
-			<div 
+			<div
 				bind:this={outputElement}
 				onscroll={handleOutputScroll}
 				class="custom-scrollbar h-full flex-1 overflow-auto bg-transparent p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap"
 			>
-				{#each diffResult as part}
+				{#each diffResult as part, i (i)}
 					<span
-						class="{part.added ? 'bg-green-500/20 text-green-600 dark:text-green-400' : ''} {part.removed ? 'bg-red-500/20 text-red-600 dark:text-red-400 decoration-red-500/50 line-through' : ''}"
+						class="{part.added
+							? 'bg-green-500/20 text-green-600 dark:text-green-400'
+							: ''} {part.removed
+							? 'bg-red-500/20 text-red-600 dark:text-red-400 decoration-red-500/50 line-through'
+							: ''}"
 					>
 						{part.value}
 					</span>
