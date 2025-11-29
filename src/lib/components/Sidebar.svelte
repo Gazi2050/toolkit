@@ -15,14 +15,16 @@
 		QrCode,
 		Type,
 		Lock,
-		Database
+		Database,
+		Code2
 	} from '@lucide/svelte';
 
 	const menuItems = [
 		{ title: 'JSON Viewer', href: '/json-viewer', icon: FileJson },
 		{ title: 'Text Compare', href: '/text-compare', icon: GitCompare },
 		{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
-		{ title: 'Number Base Converter', href: '/number-base', icon: Binary }
+		{ title: 'Number Base Converter', href: '/number-base', icon: Binary },
+		{ title: 'Regex Tester', href: '/regex-tester', icon: Code2 }
 	];
 </script>
 

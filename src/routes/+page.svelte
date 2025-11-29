@@ -13,7 +13,8 @@
 		Image,
 		QrCode,
 		Type,
-		Clock
+		Clock,
+		Code2
 	} from '@lucide/svelte';
 
 	const tools = [
@@ -40,6 +41,12 @@
 			description: 'Convert numbers between binary, octal, decimal, and hexadecimal.',
 			icon: Binary,
 			href: '/number-base'
+		},
+		{
+			title: 'Regex Tester',
+			description: 'Create, test, and validate regular expressions with real-time feedback.',
+			icon: Code2,
+			href: '/regex-tester'
 		}
 	];
 </script>
