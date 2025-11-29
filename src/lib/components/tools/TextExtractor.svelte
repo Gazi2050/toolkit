@@ -12,9 +12,11 @@
 	let isDragging = $state(false);
 	let fileType = $state<'image' | 'pdf' | null>(null);
 
+	/**
+	 * Dynamically imports pdfjs-dist and sets up the worker
+	 */
 	async function getPdfLib() {
 		const pdfjsLib = await import('pdfjs-dist');
-		// Use the worker from node_modules
 		pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
 			'pdfjs-dist/build/pdf.worker.min.mjs',
 			import.meta.url
@@ -22,16 +24,25 @@
 		return pdfjsLib;
 	}
 
-	function handleDragOver(e: DragEvent) {
+	/**
+	 * Handles drag over event
+	 */
+	function handleDragOver(e: DragEvent): void {
 		e.preventDefault();
 		isDragging = true;
 	}
 
-	function handleDragLeave() {
+	/**
+	 * Handles drag leave event
+	 */
+	function handleDragLeave(): void {
 		isDragging = false;
 	}
 
-	function handleDrop(e: DragEvent) {
+	/**
+	 * Handles file drop event
+	 */
+	function handleDrop(e: DragEvent): void {
 		e.preventDefault();
 		isDragging = false;
 		
@@ -40,14 +51,21 @@
 		}
 	}
 
-	function handleFileInput(e: Event) {
+	/**
+	 * Handles file input change event
+	 */
+	function handleFileInput(e: Event): void {
 		const target = e.target as HTMLInputElement;
 		if (target.files && target.files[0]) {
 			handleFile(target.files[0]);
 		}
 	}
 
-	function handleFile(newFile: File) {
+	/**
+	 * Processes the selected file and sets up preview
+	 * @param newFile - The file to process
+	 */
+	function handleFile(newFile: File): void {
 		const isImage = ['image/png', 'image/jpeg', 'image/webp'].includes(newFile.type);
 		const isPdf = newFile.type === 'application/pdf';
 
@@ -72,7 +90,11 @@
 		}
 	}
 
-	async function renderPdfPreview(file: File) {
+	/**
+	 * Renders the first page of a PDF as a preview image
+	 * @param file - The PDF file
+	 */
+	async function renderPdfPreview(file: File): Promise<void> {
 		try {
 			const pdfjsLib = await getPdfLib();
 			const arrayBuffer = await file.arrayBuffer();
@@ -97,7 +119,10 @@
 		}
 	}
 
-	async function extractText() {
+	/**
+	 * Extracts text from the loaded file (Image or PDF) using OCR
+	 */
+	async function extractText(): Promise<void> {
 		if (!file || !fileType) return;
 
 		isProcessing = true;
@@ -111,11 +136,8 @@
 				const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 				const numPages = pdf.numPages;
 
-				// Initialize Tesseract worker for PDF OCR
 				const worker = await Tesseract.createWorker('eng', 1, {
-					logger: m => {
-						// Logger not used for PDF overall progress
-					}
+					logger: m => {}
 				});
 
 				for (let i = 1; i <= numPages; i++) {
@@ -143,7 +165,6 @@
 				progress = 100;
 				status = 'Completed';
 			} else {
-				// Image OCR
 				const worker = await Tesseract.createWorker('eng', 1, {
 					logger: m => {
 						if (m.status === 'recognizing text') {
@@ -168,13 +189,19 @@
 		}
 	}
 
-	function copyText() {
+	/**
+	 * Copies extracted text to clipboard
+	 */
+	function copyText(): void {
 		if (extractedText) {
 			navigator.clipboard.writeText(extractedText);
 		}
 	}
 
-	function clear() {
+	/**
+	 * Clears all file data and results
+	 */
+	function clear(): void {
 		if (previewUrl) URL.revokeObjectURL(previewUrl);
 		file = null;
 		previewUrl = null;
@@ -186,7 +213,6 @@
 
 <div class="flex max-h-[calc(100vh-10rem)] flex-col gap-4 overflow-hidden">
 	{#if !file}
-		<!-- Upload Area -->
 		<div
 			role="button"
 			tabindex="0"
@@ -219,7 +245,6 @@
 		</div>
 	{:else}
 		<div class="grid flex-1 gap-4 overflow-hidden lg:grid-cols-2">
-			<!-- Image Preview -->
 			<div class="flex min-h-0 flex-col gap-3">
 				<div class="relative min-h-0 flex-1 overflow-hidden rounded-lg border bg-muted/50">
 					{#if previewUrl}
@@ -267,7 +292,6 @@
 				</div>
 			</div>
 
-			<!-- Extracted Text -->
 			<div class="flex min-h-0 flex-col gap-2">
 				<div class="flex items-center justify-between">
 					<label for="extracted-text" class="text-sm font-medium text-muted-foreground">Extracted Text</label>

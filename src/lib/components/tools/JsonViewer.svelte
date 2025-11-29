@@ -6,18 +6,22 @@
 	let error = $state<{ message: string; line?: number; column?: number; snippet?: string } | null>(null);
 	let mode: 'format' | 'minify' = $state('format');
 	
-	let inputElement: HTMLTextAreaElement;
-	let inputLinesElement: HTMLDivElement;
-	let outputElement: HTMLPreElement;
-	let outputLinesElement: HTMLDivElement;
+	let inputElement = $state<HTMLTextAreaElement | null>(null);
+	let inputLinesElement = $state<HTMLDivElement | null>(null);
+	let outputElement = $state<HTMLPreElement | null>(null);
+	let outputLinesElement = $state<HTMLDivElement | null>(null);
 
+	/**
+	 * Parses error message to extract line and column numbers and creates a code snippet
+	 * @param e - The error object
+	 * @param json - The input JSON string
+	 */
 	function getErrorDetails(e: Error, json: string) {
 		const msg = e.message;
 		let line = 0;
 		let column = 0;
 		let snippet = '';
 
-		// Try to extract position from message (e.g., "at position 123")
 		const match = msg.match(/at position (\d+)/);
 		if (match) {
 			const pos = parseInt(match[1], 10);
@@ -25,7 +29,6 @@
 			line = lines.length;
 			column = lines[lines.length - 1].length + 1;
 
-			// Get snippet around error
 			const linesAll = json.split('\n');
 			const startLine = Math.max(0, line - 2);
 			const endLine = Math.min(linesAll.length, line + 1);
@@ -39,7 +42,10 @@
 		return { message: msg, line, column, snippet };
 	}
 
-	function formatJSON() {
+	/**
+	 * Formats the input JSON string with 2-space indentation
+	 */
+	function formatJSON(): void {
 		try {
 			if (!input.trim()) {
 				output = '';
@@ -56,7 +62,10 @@
 		}
 	}
 
-	function minifyJSON() {
+	/**
+	 * Minifies the input JSON string by removing whitespace
+	 */
+	function minifyJSON(): void {
 		try {
 			if (!input.trim()) {
 				output = '';
@@ -73,25 +82,37 @@
 		}
 	}
 
-	function clear() {
+	/**
+	 * Clears all input, output, and error states
+	 */
+	function clear(): void {
 		input = '';
 		output = '';
 		error = null;
 	}
 
-	function copyToClipboard() {
+	/**
+	 * Copies the output content to clipboard
+	 */
+	function copyToClipboard(): void {
 		if (output) {
 			navigator.clipboard.writeText(output);
 		}
 	}
 
-	function handleInputScroll() {
+	/**
+	 * Syncs scroll position of input line numbers with textarea
+	 */
+	function handleInputScroll(): void {
 		if (inputLinesElement && inputElement) {
 			inputLinesElement.scrollTop = inputElement.scrollTop;
 		}
 	}
 
-	function handleOutputScroll() {
+	/**
+	 * Syncs scroll position of output line numbers with pre element
+	 */
+	function handleOutputScroll(): void {
 		if (outputLinesElement && outputElement) {
 			outputLinesElement.scrollTop = outputElement.scrollTop;
 		}
@@ -130,7 +151,6 @@
 				</div>
 			</div>
 			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30 {error ? 'border-red-500/50 focus-within:ring-red-500/30' : ''}">
-				<!-- Line Numbers -->
 				<div
 					bind:this={inputLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
@@ -140,7 +160,6 @@
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
-				<!-- Textarea -->
 				<textarea
 					id="json-input"
 					bind:this={inputElement}
@@ -183,7 +202,6 @@
 						{/if}
 					</div>
 				{:else}
-					<!-- Line Numbers -->
 					<div
 						bind:this={outputLinesElement}
 						class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
@@ -193,7 +211,6 @@
 							<div class="px-2">{line}</div>
 						{/each}
 					</div>
-					<!-- Output -->
 					<pre
 						bind:this={outputElement}
 						onscroll={handleOutputScroll}

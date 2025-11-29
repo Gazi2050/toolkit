@@ -4,18 +4,18 @@
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 	import { Menu } from '@lucide/svelte';
 	import { page } from '$app/stores';
-	
+
 	let { children } = $props();
 	let isSidebarOpen = $state(false);
-
-	// Check if we're on the home page
 	let isHomePage = $derived($page.url.pathname === '/');
 
-	function toggleSidebar() {
+	/**
+	 * Toggles the sidebar open/closed state
+	 */
+	function toggleSidebar(): void {
 		isSidebarOpen = !isSidebarOpen;
 	}
 
-	// Close sidebar on navigation
 	$effect(() => {
 		if ($page.url.pathname) {
 			isSidebarOpen = false;
@@ -24,7 +24,6 @@
 </script>
 
 <div class="min-h-screen bg-background font-sans antialiased">
-	<!-- Mobile Header - Only show when not on home page -->
 	{#if !isHomePage}
 		<div class="sticky top-0 z-50 flex items-center justify-between border-b bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:hidden">
 			<button 
@@ -38,7 +37,6 @@
 			<ThemeToggle />
 		</div>
 
-		<!-- Sidebar Overlay -->
 		{#if isSidebarOpen}
 			<div 
 				class="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm sm:hidden"
@@ -49,11 +47,9 @@
 			></div>
 		{/if}
 
-		<!-- Sidebar - Only show when not on home page -->
 		<Sidebar class={isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} />
 	{/if}
 	
-	<!-- Main content - Adjust margin based on whether sidebar is shown -->
 	<main class="p-4 {isHomePage ? '' : 'sm:ml-64'}">
 		<div class="mx-auto max-w-7xl p-4">
 			{#if !isHomePage}

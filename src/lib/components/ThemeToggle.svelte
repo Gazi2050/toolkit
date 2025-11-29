@@ -5,7 +5,6 @@
 	let isDark = true;
 
 	onMount(() => {
-		// Check initial preference
 		if (
 			localStorage.theme === 'dark' ||
 			(!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -18,7 +17,11 @@
 		}
 	});
 
-	function toggleTheme() {
+	/**
+	 * Toggles the application theme between light and dark modes
+	 * Updates local storage and DOM class list
+	 */
+	function toggleTheme(): void {
 		isDark = !isDark;
 		if (isDark) {
 			document.documentElement.classList.add('dark');

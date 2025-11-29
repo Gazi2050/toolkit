@@ -1,33 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import {
-		Home,
-		FileJson,
-		GitCompare,
-		CaseSensitive,
-		Binary,
-		Image,
-		Regex,
-		FileText,
-		ArrowRightLeft,
-		Hash,
-		Clock,
-		QrCode,
-		Type,
-		Lock,
-		Database,
-		Code2,
-		ScanText
-	} from '@lucide/svelte';
-
-	const menuItems = [
-		{ title: 'JSON Viewer', href: '/json-viewer', icon: FileJson },
-		{ title: 'Text Compare', href: '/text-compare', icon: GitCompare },
-		{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
-		{ title: 'Number Base Converter', href: '/number-base', icon: Binary },
-		{ title: 'Regex Tester', href: '/regex-tester', icon: Code2 },
-		{ title: 'Text Extractor', href: '/text-extractor', icon: ScanText }
-	];
+	import { MENU_ITEMS } from '$lib/constants/menu';
 </script>
 
 <aside class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r bg-card transition-transform sm:translate-x-0 {$$props.class || ''}">
@@ -37,7 +10,7 @@
 		</a>
 
 		<nav class="flex-1 space-y-1">
-			{#each menuItems as item}
+			{#each MENU_ITEMS as item}
 				<a
 					href={item.href}
 					class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:bg-accent hover:text-accent-foreground {$page.url.pathname === item.href ? 'bg-accent text-accent-foreground' : 'text-muted-foreground'}"

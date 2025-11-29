@@ -1,10 +1,14 @@
 <script lang="ts">
-	import type { ComponentType } from 'svelte';
+	import type { Component } from 'svelte';
 	import { ArrowUpRight } from '@lucide/svelte';
 
+	/** Title of the tool card */
 	export let title: string;
+	/** Description text for the tool */
 	export let description: string;
-	export let icon: any;
+	/** Icon component to display */
+	export let icon: Component;
+	/** Navigation link for the card */
 	export let href: string;
 </script>
 

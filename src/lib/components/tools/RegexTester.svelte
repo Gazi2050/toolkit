@@ -31,10 +31,17 @@
 		{ name: 'Hex Color', pattern: '#[0-9A-Fa-f]{6}' }
 	];
 
-	function toggleFlag(key: string) {
+	/**
+	 * Toggles the state of a regex flag
+	 * @param key - The flag key (e.g., 'g', 'i')
+	 */
+	function toggleFlag(key: string): void {
 		activeFlags[key as keyof typeof activeFlags] = !activeFlags[key as keyof typeof activeFlags];
 	}
 
+	/**
+	 * Constructs the flags string for RegExp constructor
+	 */
 	function getFlagsString(): string {
 		return Object.entries(activeFlags)
 			.filter(([_, value]) => value)
@@ -42,7 +49,10 @@
 			.join('');
 	}
 
-	function testRegex() {
+	/**
+	 * Tests the regex pattern against the test string
+	 */
+	function testRegex(): void {
 		try {
 			if (!pattern || !testString) {
 				matches = [];
@@ -74,18 +84,28 @@
 		}
 	}
 
-	function loadPattern(patternStr: string) {
+	/**
+	 * Loads a common pattern into the input
+	 * @param patternStr - The regex pattern string
+	 */
+	function loadPattern(patternStr: string): void {
 		pattern = patternStr;
 	}
 
-	function clear() {
+	/**
+	 * Clears all inputs and results
+	 */
+	function clear(): void {
 		pattern = '';
 		testString = '';
 		matches = [];
 		error = null;
 	}
 
-	function copyPattern() {
+	/**
+	 * Copies the full regex pattern (including flags) to clipboard
+	 */
+	function copyPattern(): void {
 		if (pattern) {
 			const flagsStr = getFlagsString();
 			navigator.clipboard.writeText(`/${pattern}/${flagsStr}`);
@@ -98,7 +118,6 @@
 </script>
 
 <div class="flex max-h-[calc(100vh-10rem)] flex-col gap-4 overflow-hidden">
-	<!-- Pattern Input -->
 	<div class="flex flex-col gap-3 rounded-lg border bg-card p-3">
 		<div class="flex flex-col gap-2">
 			<label for="pattern" class="text-sm font-medium">Regular Expression</label>
@@ -119,14 +138,14 @@
 			{/if}
 		</div>
 
-		<!-- Flags -->
 		<div class="flex flex-col gap-2">
-			<label class="text-sm font-medium">Flags</label>
-			<div class="flex flex-wrap gap-2">
+			<span class="text-sm font-medium" id="flags-label">Flags</span>
+			<div class="flex flex-wrap gap-2" role="group" aria-labelledby="flags-label">
 				{#each flags as flag}
 					<button
 						onclick={() => toggleFlag(flag.key)}
 						class="flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors {activeFlags[flag.key as keyof typeof activeFlags] ? 'border-primary bg-primary text-primary-foreground hover:bg-primary/90' : 'border-input bg-background hover:bg-accent'}"
+						aria-pressed={activeFlags[flag.key as keyof typeof activeFlags]}
 					>
 						<span class="font-mono font-bold">{flag.key}</span>
 						<span class="text-xs opacity-90">{flag.description}</span>
@@ -135,10 +154,9 @@
 			</div>
 		</div>
 
-		<!-- Common Patterns -->
 		<div class="flex flex-col gap-2">
-			<label class="text-sm font-medium">Common Patterns</label>
-			<div class="flex flex-wrap gap-2">
+			<span class="text-sm font-medium" id="patterns-label">Common Patterns</span>
+			<div class="flex flex-wrap gap-2" role="group" aria-labelledby="patterns-label">
 				{#each commonPatterns as cp}
 					<button
 						onclick={() => loadPattern(cp.pattern)}
@@ -151,7 +169,6 @@
 			</div>
 		</div>
 
-		<!-- Action Buttons -->
 		<div class="flex gap-2">
 			<button
 				onclick={copyPattern}
@@ -171,7 +188,6 @@
 		</div>
 	</div>
 
-	<!-- Test String -->
 	<div class="flex flex-col gap-2">
 		<label for="test-string" class="text-sm font-medium">Test String</label>
 		<textarea
@@ -182,10 +198,9 @@
 		></textarea>
 	</div>
 
-	<!-- Results -->
 	<div class="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
 		<div class="flex items-center gap-2">
-			<label class="text-sm font-medium">Results</label>
+			<span class="text-sm font-medium">Results</span>
 			{#if pattern && testString}
 				{#if matches.length > 0}
 					<span class="flex items-center gap-1.5 rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-600 dark:text-green-400">

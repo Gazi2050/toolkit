@@ -7,14 +7,17 @@
 	let mode: 'encode' | 'decode' = $state('encode');
 	let method: 'base64' | 'base32' | 'base16' = $state('base64');
 
-	let inputElement: HTMLTextAreaElement;
-	let inputLinesElement: HTMLDivElement;
-	let outputElement: HTMLPreElement;
-	let outputLinesElement: HTMLDivElement;
+	let inputElement = $state<HTMLTextAreaElement | null>(null);
+	let inputLinesElement = $state<HTMLDivElement | null>(null);
+	let outputElement = $state<HTMLPreElement | null>(null);
+	let outputLinesElement = $state<HTMLDivElement | null>(null);
 
-	// Base32 alphabet
 	const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
+	/**
+	 * Encodes a string to Base32
+	 * @param str - The input string
+	 */
 	function base32Encode(str: string): string {
 		const bytes = new TextEncoder().encode(str);
 		let bits = '';
@@ -28,13 +31,16 @@
 			result += BASE32_ALPHABET[parseInt(chunk, 2)];
 		}
 		
-		// Add padding
 		while (result.length % 8 !== 0) {
 			result += '=';
 		}
 		return result;
 	}
 
+	/**
+	 * Decodes a Base32 string
+	 * @param str - The Base32 string
+	 */
 	function base32Decode(str: string): string {
 		str = str.toUpperCase().replace(/=+$/, '');
 		let bits = '';
@@ -55,12 +61,20 @@
 		return new TextDecoder().decode(new Uint8Array(bytes));
 	}
 
+	/**
+	 * Encodes a string to Hex (Base16)
+	 * @param str - The input string
+	 */
 	function hexEncode(str: string): string {
 		return Array.from(new TextEncoder().encode(str))
 			.map(byte => byte.toString(16).padStart(2, '0'))
 			.join('');
 	}
 
+	/**
+	 * Decodes a Hex (Base16) string
+	 * @param str - The Hex string
+	 */
 	function hexDecode(str: string): string {
 		const hex = str.replace(/\s/g, '');
 		if (hex.length % 2 !== 0) {
@@ -78,7 +92,10 @@
 		return new TextDecoder().decode(new Uint8Array(bytes));
 	}
 
-	function process() {
+	/**
+	 * Processes the input based on selected mode and method
+	 */
+	function process(): void {
 		try {
 			if (!input.trim()) {
 				output = '';
@@ -126,38 +143,52 @@
 		}
 	}
 
-	function clear() {
+	/**
+	 * Clears all input, output, and error states
+	 */
+	function clear(): void {
 		input = '';
 		output = '';
 		error = null;
 	}
 
-	function copyToClipboard() {
+	/**
+	 * Copies the output content to clipboard
+	 */
+	function copyToClipboard(): void {
 		if (output) {
 			navigator.clipboard.writeText(output);
 		}
 	}
 
-	function swap() {
+	/**
+	 * Swaps input and output values and toggles mode
+	 */
+	function swap(): void {
 		const temp = input;
 		input = output;
 		output = temp;
 		mode = mode === 'encode' ? 'decode' : 'encode';
 	}
 
-	function handleInputScroll() {
+	/**
+	 * Syncs scroll position of input line numbers
+	 */
+	function handleInputScroll(): void {
 		if (inputLinesElement && inputElement) {
 			inputLinesElement.scrollTop = inputElement.scrollTop;
 		}
 	}
 
-	function handleOutputScroll() {
+	/**
+	 * Syncs scroll position of output line numbers
+	 */
+	function handleOutputScroll(): void {
 		if (outputLinesElement && outputElement) {
 			outputLinesElement.scrollTop = outputElement.scrollTop;
 		}
 	}
 
-	// Auto-process when input or settings change
 	$effect(() => {
 		if (input || method || mode) process();
 	});
@@ -167,9 +198,7 @@
 </script>
 
 <div class="flex flex-col gap-4">
-	<!-- Controls -->
 	<div class="flex flex-wrap items-center gap-3">
-		<!-- Mode Toggle -->
 		<div class="flex rounded-md border bg-muted/50 p-1">
 			<button
 				class="rounded px-3 py-1.5 text-sm font-medium transition-colors {mode === 'encode' ? 'bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}"
@@ -185,7 +214,6 @@
 			</button>
 		</div>
 
-		<!-- Method Selector -->
 		<div class="relative">
 			<select
 				bind:value={method}
@@ -202,7 +230,6 @@
 			</div>
 		</div>
 
-		<!-- Actions -->
 		<button
 			onclick={swap}
 			class="inline-flex items-center justify-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
@@ -221,15 +248,12 @@
 		</button>
 	</div>
 
-	<!-- Input/Output Grid -->
 	<div class="grid h-[calc(100vh-20rem)] gap-4 lg:grid-cols-2">
-		<!-- Input -->
 		<div class="flex h-full min-h-0 flex-col gap-2">
 			<label for="input-text" class="text-sm font-medium text-muted-foreground">
 				Input {mode === 'encode' ? '(Plain Text)' : '(Encoded Text)'}
 			</label>
 			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30">
-				<!-- Line Numbers -->
 				<div
 					bind:this={inputLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
@@ -239,7 +263,6 @@
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
-				<!-- Textarea -->
 				<textarea
 					id="input-text"
 					bind:this={inputElement}
@@ -251,7 +274,6 @@
 			</div>
 		</div>
 
-		<!-- Output -->
 		<div class="flex h-full min-h-0 flex-col gap-2">
 			<div class="flex items-center justify-between">
 				<span class="text-sm font-medium text-muted-foreground">
@@ -278,7 +300,6 @@
 						{/if}
 					</div>
 				{:else}
-					<!-- Line Numbers -->
 					<div
 						bind:this={outputLinesElement}
 						class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
@@ -288,7 +309,6 @@
 							<div class="px-2">{line}</div>
 						{/each}
 					</div>
-					<!-- Output -->
 					<pre
 						bind:this={outputElement}
 						onscroll={handleOutputScroll}

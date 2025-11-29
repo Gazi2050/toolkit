@@ -5,12 +5,16 @@
 	let inputBase: 2 | 8 | 10 | 16 = $state(10);
 	let error = $state<string | null>(null);
 
-	// Conversion results
 	let binary = $state('');
 	let octal = $state('');
 	let decimal = $state('');
 	let hexadecimal = $state('');
 
+	/**
+	 * Checks if the value is valid for the given base
+	 * @param value - The input value
+	 * @param base - The base to check against
+	 */
 	function isValidForBase(value: string, base: number): boolean {
 		if (!value) return true;
 		
@@ -24,7 +28,10 @@
 		return validChars[base as keyof typeof validChars].test(value);
 	}
 
-	function convert() {
+	/**
+	 * Converts the input value to all supported bases
+	 */
+	function convert(): void {
 		try {
 			if (!inputValue.trim()) {
 				binary = '';
@@ -35,19 +42,16 @@
 				return;
 			}
 
-			// Validate input
 			if (!isValidForBase(inputValue, inputBase)) {
 				throw new Error(`Invalid characters for base ${inputBase}`);
 			}
 
-			// Convert to decimal first
 			const decimalValue = parseInt(inputValue, inputBase);
 
 			if (isNaN(decimalValue)) {
 				throw new Error('Invalid number');
 			}
 
-			// Convert to all bases
 			binary = decimalValue.toString(2);
 			octal = decimalValue.toString(8);
 			decimal = decimalValue.toString(10);
@@ -63,13 +67,20 @@
 		}
 	}
 
-	function copyToClipboard(text: string) {
+	/**
+	 * Copies text to clipboard
+	 * @param text - The text to copy
+	 */
+	function copyToClipboard(text: string): void {
 		if (text) {
 			navigator.clipboard.writeText(text);
 		}
 	}
 
-	function clear() {
+	/**
+	 * Clears all inputs and results
+	 */
+	function clear(): void {
 		inputValue = '';
 		binary = '';
 		octal = '';
@@ -78,25 +89,27 @@
 		error = null;
 	}
 
-	function setSample() {
+	/**
+	 * Sets a sample value for demonstration
+	 */
+	function setSample(): void {
 		inputValue = '168898';
 		inputBase = 10;
 		convert();
 	}
 
-	// Auto-convert when input changes
 	$effect(() => {
 		if (inputValue || inputBase) convert();
 	});
 </script>
 
 <div class="flex flex-col gap-6">
-	<!-- Header Controls -->
 	<div class="flex items-center justify-between">
 		<div class="flex items-center gap-3">
-			<label class="text-sm font-medium text-muted-foreground">From:</label>
+			<label for="base-select" class="text-sm font-medium text-muted-foreground">From:</label>
 			<div class="relative">
 				<select
+					id="base-select"
 					bind:value={inputBase}
 					class="appearance-none rounded-md border bg-background px-4 py-1.5 pr-10 text-sm font-medium shadow-sm transition-colors hover:bg-accent focus:outline-none focus:ring-1 focus:ring-primary/30"
 				>
@@ -128,7 +141,6 @@
 		</div>
 	</div>
 
-	<!-- Input -->
 	<div class="flex flex-col gap-2">
 		<label for="input-number" class="text-sm font-medium text-muted-foreground">
 			Input (Base {inputBase})
@@ -145,9 +157,7 @@
 		{/if}
 	</div>
 
-	<!-- Conversion Results Grid -->
 	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-		<!-- Binary -->
 		<div class="flex flex-col gap-2 rounded-lg border bg-muted/30 p-4">
 			<div class="flex items-center justify-between">
 				<div>
@@ -168,7 +178,6 @@
 			</div>
 		</div>
 
-		<!-- Octal -->
 		<div class="flex flex-col gap-2 rounded-lg border bg-muted/30 p-4">
 			<div class="flex items-center justify-between">
 				<div>
@@ -189,7 +198,6 @@
 			</div>
 		</div>
 
-		<!-- Decimal -->
 		<div class="flex flex-col gap-2 rounded-lg border bg-muted/30 p-4">
 			<div class="flex items-center justify-between">
 				<div>
@@ -210,7 +218,6 @@
 			</div>
 		</div>
 
-		<!-- Hexadecimal -->
 		<div class="flex flex-col gap-2 rounded-lg border bg-muted/30 p-4">
 			<div class="flex items-center justify-between">
 				<div>
@@ -232,7 +239,6 @@
 		</div>
 	</div>
 
-	<!-- Quick Reference -->
 	<div class="rounded-lg border bg-muted/20 p-4">
 		<h3 class="mb-3 text-sm font-semibold">Quick Reference:</h3>
 		<div class="grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-4">

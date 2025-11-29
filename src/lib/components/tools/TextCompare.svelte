@@ -14,7 +14,10 @@
 	let outputElement: HTMLDivElement;
 	let outputLinesElement: HTMLDivElement;
 
-	function calculateDiff() {
+	/**
+	 * Calculates the difference between old and new text based on selected mode
+	 */
+	function calculateDiff(): void {
 		if (!oldText && !newText) {
 			diffResult = [];
 			return;
@@ -33,31 +36,42 @@
 		}
 	}
 
-	function clear() {
+	/**
+	 * Clears all inputs and results
+	 */
+	function clear(): void {
 		oldText = '';
 		newText = '';
 		diffResult = [];
 	}
 
-	function handleOldTextScroll() {
+	/**
+	 * Syncs scroll position of old text line numbers
+	 */
+	function handleOldTextScroll(): void {
 		if (oldTextLinesElement && oldTextElement) {
 			oldTextLinesElement.scrollTop = oldTextElement.scrollTop;
 		}
 	}
 
-	function handleNewTextScroll() {
+	/**
+	 * Syncs scroll position of new text line numbers
+	 */
+	function handleNewTextScroll(): void {
 		if (newTextLinesElement && newTextElement) {
 			newTextLinesElement.scrollTop = newTextElement.scrollTop;
 		}
 	}
 
-	function handleOutputScroll() {
+	/**
+	 * Syncs scroll position of output line numbers
+	 */
+	function handleOutputScroll(): void {
 		if (outputLinesElement && outputElement) {
 			outputLinesElement.scrollTop = outputElement.scrollTop;
 		}
 	}
 
-	// Recalculate when inputs or mode change
 	$effect(() => {
 		if (oldText || newText || mode) calculateDiff();
 	});
@@ -65,7 +79,6 @@
 	let oldTextLineNumbers = $derived(oldText.split('\n').map((_, i) => i + 1));
 	let newTextLineNumbers = $derived(newText.split('\n').map((_, i) => i + 1));
 	
-	// For output, count actual lines in the diff result
 	let outputLineCount = $derived(() => {
 		if (diffResult.length === 0) return 1;
 		const text = diffResult.map(p => p.value).join('');
@@ -80,7 +93,6 @@
 		<div class="flex h-1/2 min-h-0 flex-col gap-2">
 			<label for="original" class="text-sm font-medium text-muted-foreground">Original Text</label>
 			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30">
-				<!-- Line Numbers -->
 				<div
 					bind:this={oldTextLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
@@ -90,7 +102,6 @@
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
-				<!-- Textarea -->
 				<textarea
 					id="original"
 					bind:this={oldTextElement}
@@ -104,7 +115,6 @@
 		<div class="flex h-1/2 min-h-0 flex-col gap-2">
 			<label for="modified" class="text-sm font-medium text-muted-foreground">Modified Text</label>
 			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50 focus-within:ring-1 focus-within:ring-primary/30">
-				<!-- Line Numbers -->
 				<div
 					bind:this={newTextLinesElement}
 					class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
@@ -114,7 +124,6 @@
 						<div class="px-2">{line}</div>
 					{/each}
 				</div>
-				<!-- Textarea -->
 				<textarea
 					id="modified"
 					bind:this={newTextElement}
@@ -163,7 +172,6 @@
 		</div>
 
 		<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/30">
-			<!-- Line Numbers -->
 			<div
 				bind:this={outputLinesElement}
 				class="hidden select-none overflow-hidden border-r bg-muted/30 py-4 text-right font-mono text-sm text-muted-foreground sm:block"
@@ -173,7 +181,6 @@
 					<div class="px-2">{line}</div>
 				{/each}
 			</div>
-			<!-- Output Content -->
 			<div 
 				bind:this={outputElement}
 				onscroll={handleOutputScroll}
