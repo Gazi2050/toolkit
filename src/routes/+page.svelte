@@ -54,10 +54,10 @@
 			href: '/base64'
 		},
 		{
-			title: 'URL Encoder',
-			description: 'Encode or decode URLs for safe transmission.',
-			icon: ArrowRightLeft,
-			href: '/url-encoder'
+			title: 'Text Encryption',
+			description: 'Encode and decode text using Base64, Base32, and Base16.',
+			icon: Lock,
+			href: '/text-encryption'
 		},
 		{
 			title: 'Number Base',

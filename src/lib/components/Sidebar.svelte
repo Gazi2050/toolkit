@@ -37,7 +37,7 @@
 			title: 'Encoding & Conversion',
 			items: [
 				{ title: 'Base64 Converter', href: '/base64', icon: Lock },
-				{ title: 'URL Encoder', href: '/url-encoder', icon: ArrowRightLeft },
+				{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
 				{ title: 'Number Base', href: '/number-base', icon: Binary },
 				{ title: 'CSV to JSON', href: '/csv-json', icon: Database },
 				{ title: 'Image Format', href: '/image-format', icon: Image }
