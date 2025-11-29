@@ -14,7 +14,8 @@
 		QrCode,
 		Type,
 		Clock,
-		Code2
+		Code2,
+		ScanText
 	} from '@lucide/svelte';
 
 	const tools = [
@@ -47,6 +48,12 @@
 			description: 'Create, test, and validate regular expressions with real-time feedback.',
 			icon: Code2,
 			href: '/regex-tester'
+		},
+		{
+			title: 'Text Extractor',
+			description: 'Extract text from images using OCR technology.',
+			icon: ScanText,
+			href: '/text-extractor'
 		}
 	];
 </script>

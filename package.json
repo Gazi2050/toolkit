@@ -39,6 +39,8 @@
 		"vite-plugin-devtools-json": "^1.0.0"
 	},
 	"dependencies": {
-		"diff": "^8.0.2"
+		"diff": "^8.0.2",
+		"pdfjs-dist": "^5.4.449",
+		"tesseract.js": "^6.0.1"
 	}
 }

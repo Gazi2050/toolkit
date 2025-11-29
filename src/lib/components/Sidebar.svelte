@@ -16,7 +16,8 @@
 		Type,
 		Lock,
 		Database,
-		Code2
+		Code2,
+		ScanText
 	} from '@lucide/svelte';
 
 	const menuItems = [
@@ -24,7 +25,8 @@
 		{ title: 'Text Compare', href: '/text-compare', icon: GitCompare },
 		{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
 		{ title: 'Number Base Converter', href: '/number-base', icon: Binary },
-		{ title: 'Regex Tester', href: '/regex-tester', icon: Code2 }
+		{ title: 'Regex Tester', href: '/regex-tester', icon: Code2 },
+		{ title: 'Text Extractor', href: '/text-extractor', icon: ScanText }
 	];
 </script>
 
