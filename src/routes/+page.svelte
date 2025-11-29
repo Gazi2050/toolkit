@@ -19,13 +19,13 @@
 	const tools = [
 		{
 			title: 'JSON Viewer',
-			description: 'Easily view and format JSON data for better readability.',
+			description: 'Format, validate, and minify JSON data with detailed error messages.',
 			icon: FileJson,
 			href: '/json-viewer'
 		},
 		{
 			title: 'Text Compare',
-			description: 'Compare two pieces of text to identify differences quickly.',
+			description: 'Compare two blocks of text and highlight the differences.',
 			icon: GitCompare,
 			href: '/text-compare'
 		},
@@ -34,6 +34,12 @@
 			description: 'Encode and decode text using Base64, Base32, and Base16.',
 			icon: Lock,
 			href: '/text-encryption'
+		},
+		{
+			title: 'Number Base Converter',
+			description: 'Convert numbers between binary, octal, decimal, and hexadecimal.',
+			icon: Binary,
+			href: '/number-base'
 		}
 	];
 </script>

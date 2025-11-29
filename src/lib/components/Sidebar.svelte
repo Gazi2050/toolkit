@@ -21,7 +21,8 @@
 	const menuItems = [
 		{ title: 'JSON Viewer', href: '/json-viewer', icon: FileJson },
 		{ title: 'Text Compare', href: '/text-compare', icon: GitCompare },
-		{ title: 'Text Encryption', href: '/text-encryption', icon: Lock }
+		{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
+		{ title: 'Number Base Converter', href: '/number-base', icon: Binary }
 	];
 </script>
 
