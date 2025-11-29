@@ -2,10 +2,10 @@
 	import { Copy, Trash2, FileJson, Minimize, Maximize } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
 	
-	let input = '';
-	let output = '';
-	let error = '';
-	let mode: 'format' | 'minify' = 'format';
+	let input = $state('');
+	let output = $state('');
+	let error = $state('');
+	let mode: 'format' | 'minify' = $state('format');
 
 	function formatJSON() {
 		try {
@@ -52,13 +52,10 @@
 			navigator.clipboard.writeText(output);
 		}
 	}
-
-	// Auto-format on input change if valid (optional, maybe too aggressive)
-	// For now, let's stick to manual buttons or maybe format on paste?
 </script>
 
 <div class="grid h-[calc(100vh-12rem)] gap-4 lg:grid-cols-2">
-	<div class="flex flex-col gap-2">
+	<div class="flex h-full min-h-0 flex-col gap-2">
 		<div class="flex items-center justify-between">
 			<label for="json-input" class="text-sm font-medium text-muted-foreground">Input JSON</label>
 			<div class="flex gap-2">
@@ -70,12 +67,12 @@
 		<textarea
 			id="json-input"
 			bind:value={input}
-			class="flex-1 resize-none rounded-lg border bg-muted/50 p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+			class="custom-scrollbar flex-1 resize-none rounded-lg border bg-muted/50 p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary"
 			placeholder="Paste your JSON here..."
 		></textarea>
 	</div>
 
-	<div class="flex flex-col gap-2">
+	<div class="flex h-full min-h-0 flex-col gap-2">
 		<div class="flex items-center justify-between">
 			<span class="text-sm font-medium text-muted-foreground">Output</span>
 			<div class="flex gap-2">
@@ -94,7 +91,7 @@
 					Error: {error}
 				</div>
 			{:else}
-				<pre class="h-full overflow-auto p-4 font-mono text-sm text-green-400">{output}</pre>
+				<pre class="custom-scrollbar h-full overflow-auto p-4 font-mono text-sm text-green-400">{output}</pre>
 			{/if}
 		</div>
 	</div>

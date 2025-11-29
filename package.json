@@ -40,5 +40,9 @@
 		"typescript-eslint": "^8.47.0",
 		"vite": "^7.2.2",
 		"vite-plugin-devtools-json": "^1.0.0"
+	},
+	"dependencies": {
+		"@types/diff": "^8.0.0",
+		"diff": "^8.0.2"
 	}
 }

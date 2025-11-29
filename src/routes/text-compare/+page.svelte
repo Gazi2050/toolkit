@@ -1,11 +1,18 @@
 <script lang="ts">
+	import TextCompare from '$lib/components/tools/TextCompare.svelte';
 	import { GitCompare } from '@lucide/svelte';
 </script>
 
-<div class="flex flex-col items-center justify-center py-20 text-center">
-	<div class="mb-6 rounded-full bg-muted p-6">
-		<GitCompare class="h-12 w-12 text-primary" />
+<div class="flex h-full flex-col">
+	<div class="mb-6 flex items-center gap-3 border-b pb-4">
+		<div class="rounded-lg bg-primary/10 p-2 text-primary">
+			<GitCompare class="h-6 w-6" />
+		</div>
+		<div>
+			<h1 class="text-2xl font-bold tracking-tight">Text Compare</h1>
+			<p class="text-sm text-muted-foreground">Compare two blocks of text and highlight the differences.</p>
+		</div>
 	</div>
-	<h1 class="mb-4 text-3xl font-bold">Text Compare</h1>
-	<p class="text-muted-foreground">Coming soon...</p>
+
+	<TextCompare />
 </div>
