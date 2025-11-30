@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Copy } from '@lucide/svelte';
+	import { Copy, Check } from '@lucide/svelte';
 
 	let inputValue = $state('');
 	let inputBase: 2 | 8 | 10 | 16 = $state(10);
 	let error = $state<string | null>(null);
+	let copiedId = $state<string | null>(null);
 
 	let binary = $state('');
 	let octal = $state('');
@@ -71,9 +72,11 @@
 	 * Copies text to clipboard
 	 * @param text - The text to copy
 	 */
-	function copyToClipboard(text: string): void {
+	function copyToClipboard(text: string, id: string): void {
 		if (text) {
 			navigator.clipboard.writeText(text);
+			copiedId = id;
+			setTimeout(() => (copiedId = null), 2000);
 		}
 	}
 
@@ -174,12 +177,16 @@
 					<div class="text-xs text-muted-foreground/70">0-1</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(binary)}
+					onclick={() => copyToClipboard(binary, 'binary')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!binary}
 				>
-					<Copy class="h-4 w-4" />
+					{#if copiedId === 'binary'}
+						<Check class="h-4 w-4 text-green-500" />
+					{:else}
+						<Copy class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div
@@ -198,12 +205,16 @@
 					<div class="text-xs text-muted-foreground/70">0-7</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(octal)}
+					onclick={() => copyToClipboard(octal, 'octal')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!octal}
 				>
-					<Copy class="h-4 w-4" />
+					{#if copiedId === 'octal'}
+						<Check class="h-4 w-4 text-green-500" />
+					{:else}
+						<Copy class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div
@@ -222,12 +233,16 @@
 					<div class="text-xs text-muted-foreground/70">0-9</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(decimal)}
+					onclick={() => copyToClipboard(decimal, 'decimal')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!decimal}
 				>
-					<Copy class="h-4 w-4" />
+					{#if copiedId === 'decimal'}
+						<Check class="h-4 w-4 text-green-500" />
+					{:else}
+						<Copy class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div
@@ -246,12 +261,16 @@
 					<div class="text-xs text-muted-foreground/70">0-9, A-F</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(hexadecimal)}
+					onclick={() => copyToClipboard(hexadecimal, 'hexadecimal')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!hexadecimal}
 				>
-					<Copy class="h-4 w-4" />
+					{#if copiedId === 'hexadecimal'}
+						<Check class="h-4 w-4 text-green-500" />
+					{:else}
+						<Copy class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div

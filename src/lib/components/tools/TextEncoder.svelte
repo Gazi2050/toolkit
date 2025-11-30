@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { ArrowRightLeft, Copy, Trash2 } from '@lucide/svelte';
+	import { ArrowRightLeft, Copy, Trash2, Check } from '@lucide/svelte';
 
 	let input = $state('');
 	let output = $state('');
 	let error = $state<{ message: string; details?: string } | null>(null);
+	let copied = $state(false);
 	let mode: 'encode' | 'decode' = $state('encode');
 	let method: 'base64' | 'base32' | 'base16' = $state('base64');
 
@@ -160,6 +161,8 @@
 	function copyToClipboard(): void {
 		if (output) {
 			navigator.clipboard.writeText(output);
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
 		}
 	}
 
@@ -299,7 +302,11 @@
 					onclick={copyToClipboard}
 					title="Copy to clipboard"
 				>
-					<Copy class="h-4 w-4" />
+					{#if copied}
+						<Check class="h-4 w-4 text-green-500" />
+					{:else}
+						<Copy class="h-4 w-4" />
+					{/if}
 				</button>
 			</div>
 			<div class="relative flex flex-1 overflow-hidden rounded-lg border bg-muted/50">

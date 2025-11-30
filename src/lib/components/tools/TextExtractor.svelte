@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Upload, FileText, Copy, RefreshCw, AlertCircle, Loader2 } from '@lucide/svelte';
+	import { Upload, FileText, Copy, RefreshCw, AlertCircle, Loader2, Check } from '@lucide/svelte';
 	import Tesseract from 'tesseract.js';
 
 	let file = $state<File | null>(null);
@@ -11,6 +11,7 @@
 	let error = $state<string | null>(null);
 	let isDragging = $state(false);
 	let fileType = $state<'image' | 'pdf' | null>(null);
+	let copied = $state(false);
 
 	/**
 	 * Dynamically imports pdfjs-dist and sets up the worker
@@ -199,6 +200,8 @@
 	function copyText(): void {
 		if (extractedText) {
 			navigator.clipboard.writeText(extractedText);
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
 		}
 	}
 
@@ -309,8 +312,13 @@
 						disabled={!extractedText}
 						class="inline-flex items-center gap-2 rounded-md px-3 py-1 text-xs font-medium transition-colors hover:bg-accent disabled:opacity-50"
 					>
-						<Copy class="h-3 w-3" />
-						Copy
+						{#if copied}
+							<Check class="h-3 w-3 text-green-500" />
+							Copied
+						{:else}
+							<Copy class="h-3 w-3" />
+							Copy
+						{/if}
 					</button>
 				</div>
 				<textarea

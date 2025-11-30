@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { Copy, Maximize, Minimize } from '@lucide/svelte';
+	import { Copy, Maximize, Minimize, Check } from '@lucide/svelte';
 
 	let input = $state('');
 	let output = $state('');
 	let error = $state<{ message: string; line?: number; column?: number; snippet?: string } | null>(
 		null
 	);
+	let copied = $state(false);
 
 	let inputElement = $state<HTMLTextAreaElement | null>(null);
 	let inputLinesElement = $state<HTMLDivElement | null>(null);
@@ -99,6 +100,8 @@
 	function copyToClipboard(): void {
 		if (output) {
 			navigator.clipboard.writeText(output);
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
 		}
 	}
 
@@ -186,7 +189,11 @@
 						onclick={copyToClipboard}
 						title="Copy to clipboard"
 					>
-						<Copy class="h-4 w-4" />
+						{#if copied}
+							<Check class="h-4 w-4 text-green-500" />
+						{:else}
+							<Copy class="h-4 w-4" />
+						{/if}
 					</button>
 				</div>
 			</div>

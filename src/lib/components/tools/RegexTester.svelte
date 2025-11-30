@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Copy, RefreshCw, AlertCircle } from '@lucide/svelte';
+	import { Copy, RefreshCw, AlertCircle, Check } from '@lucide/svelte';
 
 	let pattern = $state('');
 	let testString = $state('');
@@ -13,6 +13,7 @@
 
 	let matches = $state<RegExpExecArray[]>([]);
 	let error = $state<string | null>(null);
+	let copied = $state(false);
 
 	const flags = [
 		{ key: 'g', description: 'Global' },
@@ -117,6 +118,8 @@
 		if (pattern) {
 			const flagsStr = getFlagsString();
 			navigator.clipboard.writeText(`/${pattern}/${flagsStr}`);
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
 		}
 	}
 
@@ -189,8 +192,13 @@
 				disabled={!pattern}
 				class="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 disabled:opacity-50"
 			>
-				<Copy class="h-4 w-4" />
-				Copy Pattern
+				{#if copied}
+					<Check class="h-4 w-4" />
+					Copied
+				{:else}
+					<Copy class="h-4 w-4" />
+					Copy Pattern
+				{/if}
 			</button>
 			<button
 				onclick={clear}
