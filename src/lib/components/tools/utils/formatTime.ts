@@ -119,3 +119,47 @@ function getUtcOffset(timeZone: string, date: Date): string {
 	const mins = match[3] || '00';
 	return hours === '00' && mins === '00' ? 'UTC' : `UTC${sign}${hours}:${mins}`;
 }
+
+/**
+ * Parses a date string (YYYY-MM-DDTHH:mm) as if it were in the specified time zone.
+ * Returns the absolute Date object.
+ */
+export function parseInTimeZone(dateString: string, timeZone: string): Date {
+	// Ensure we have a valid date string format (YYYY-MM-DDTHH:mm or similar)
+	// We assume the input is "YYYY-MM-DDTHH:mm" from the datetime-local input.
+	// We want to find the UTC timestamp that, when displayed in `timeZone`, matches `dateString`.
+
+	// 1. Construct the target "face value" time as a UTC timestamp.
+	// This gives us a stable reference point regardless of local browser time.
+	let current = new Date(dateString + 'Z');
+
+	// If invalid, return as is (or handle error)
+	if (isNaN(current.getTime())) return new Date(dateString);
+
+	// 2. We want to find a timestamp X such that X.toLocaleString(..., {timeZone}) matches dateString.
+	// We use an iterative approach to find the offset.
+
+	// Target time value (milliseconds) from the "face value" (treated as UTC)
+	const targetTime = current.getTime();
+
+	for (let i = 0; i < 3; i++) {
+		// Format the current guess in the target timezone
+		// We need to be careful to get the same format "YYYY-MM-DDTHH:mm" or similar ISO-like structure
+		// sv-SE is good for ISO-like formatting: "2023-01-01 12:00:00"
+		const formattedString = current.toLocaleString('sv-SE', { timeZone }).replace(' ', 'T');
+
+		// Parse this formatted string back as UTC to compare with our target
+		// We need to handle potential truncation of seconds in the input dateString if it doesn't have them
+		// But usually dateString from input has HH:mm. toLocaleString has HH:mm:ss.
+		// Let's just compare the timestamps derived from them.
+		const formattedTimeInUTC = new Date(formattedString + 'Z').getTime();
+
+		const diff = targetTime - formattedTimeInUTC;
+
+		if (Math.abs(diff) < 1000) break; // Converged (within 1 second)
+
+		current = new Date(current.getTime() + diff);
+	}
+
+	return current;
+}

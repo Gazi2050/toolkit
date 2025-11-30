@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Copy, Check, Clock, Plus, X } from '@lucide/svelte';
 	import { onMount } from 'svelte';
-	import { formatTime } from './utils/formatTime';
+	import { formatTime, parseInTimeZone } from './utils/formatTime';
 	import { copyToClipboard } from './utils/copy';
 
 	let sourceTime = $state(new Date().toISOString().slice(0, 16));
@@ -21,8 +21,8 @@
 
 	function setNow(): void {
 		const now = new Date();
-		const offset = now.getTimezoneOffset() * 60000;
-		sourceTime = new Date(now.getTime() - offset).toISOString().slice(0, 16);
+		const timeInZone = formatTime(now, sourceZone);
+		sourceTime = timeInZone.iso.slice(0, 16);
 	}
 
 	function addZone(): void {
@@ -54,7 +54,7 @@
 		sourceSearchQuery = '';
 	}
 
-	let sourceDate = $derived(new Date(sourceTime));
+	let sourceDate = $derived(parseInTimeZone(sourceTime, sourceZone));
 	let filteredZones = $derived(
 		availableZones
 			.filter(
