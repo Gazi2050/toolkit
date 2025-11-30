@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PasswordGenerator from '$lib/components/tools/PasswordGenerator.svelte';
+	import { KeyRound } from '@lucide/svelte';
 </script>
 
 <svelte:head>
@@ -10,15 +11,18 @@
 	/>
 </svelte:head>
 
-<div class="flex h-full flex-col gap-4 overflow-hidden">
-	<div class="flex-shrink-0">
-		<h1 class="text-3xl font-bold tracking-tight">Password Generator</h1>
-		<p class="mt-2 text-muted-foreground">
-			Generate secure passwords with customizable options and strength indicators
-		</p>
+<div class="flex flex-col">
+	<div class="mb-6 flex items-center gap-3 border-b pb-4">
+		<div class="rounded-lg bg-primary/10 p-2 text-primary">
+			<KeyRound class="h-6 w-6" />
+		</div>
+		<div>
+			<h1 class="text-2xl font-bold tracking-tight">Password Generator</h1>
+			<p class="text-sm text-muted-foreground">
+				Generate secure passwords with customizable options and strength indicators
+			</p>
+		</div>
 	</div>
 
-	<div class="min-h-0 flex-1 overflow-hidden">
-		<PasswordGenerator />
-	</div>
+	<PasswordGenerator />
 </div>
