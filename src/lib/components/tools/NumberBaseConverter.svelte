@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Copy, Check } from '@lucide/svelte';
+	import { convertNumber } from './utils/numberBase';
+	import { copyToClipboard } from './utils/copy';
 
 	let inputValue = $state('');
 	let inputBase: 2 | 8 | 10 | 16 = $state(10);
@@ -11,78 +13,40 @@
 	let decimal = $state('');
 	let hexadecimal = $state('');
 
-	/**
-	 * Checks if the value is valid for the given base
-	 * @param value - The input value
-	 * @param base - The base to check against
-	 */
-	function isValidForBase(value: string, base: number): boolean {
-		if (!value) return true;
-
-		const validChars = {
-			2: /^[01]+$/,
-			8: /^[0-7]+$/,
-			10: /^[0-9]+$/,
-			16: /^[0-9A-Fa-f]+$/
-		};
-
-		return validChars[base as keyof typeof validChars].test(value);
-	}
-
-	/**
-	 * Converts the input value to all supported bases
-	 */
 	function convert(): void {
-		try {
-			if (!inputValue.trim()) {
-				binary = '';
-				octal = '';
-				decimal = '';
-				hexadecimal = '';
-				error = null;
-				return;
-			}
-
-			if (!isValidForBase(inputValue, inputBase)) {
-				throw new Error(`Invalid characters for base ${inputBase}`);
-			}
-
-			const decimalValue = parseInt(inputValue, inputBase);
-
-			if (isNaN(decimalValue)) {
-				throw new Error('Invalid number');
-			}
-
-			binary = decimalValue.toString(2);
-			octal = decimalValue.toString(8);
-			decimal = decimalValue.toString(10);
-			hexadecimal = decimalValue.toString(16).toUpperCase();
-
-			error = null;
-		} catch (e) {
-			error = (e as Error).message;
+		if (!inputValue.trim()) {
 			binary = '';
 			octal = '';
 			decimal = '';
 			hexadecimal = '';
+			error = null;
+			return;
 		}
+
+		// Check validity first by converting to decimal
+		const check = convertNumber(inputValue, inputBase, 10);
+		if (check.error) {
+			error = check.error;
+			binary = '';
+			octal = '';
+			decimal = '';
+			hexadecimal = '';
+			return;
+		}
+
+		binary = convertNumber(inputValue, inputBase, 2).converted;
+		octal = convertNumber(inputValue, inputBase, 8).converted;
+		decimal = convertNumber(inputValue, inputBase, 10).converted;
+		hexadecimal = convertNumber(inputValue, inputBase, 16).converted;
+		error = null;
 	}
 
-	/**
-	 * Copies text to clipboard
-	 * @param text - The text to copy
-	 */
-	function copyToClipboard(text: string, id: string): void {
-		if (text) {
-			navigator.clipboard.writeText(text);
-			copiedId = id;
-			setTimeout(() => (copiedId = null), 2000);
-		}
+	async function copy(text: string, id: string) {
+		await copyToClipboard(text);
+		copiedId = id;
+		setTimeout(() => (copiedId = null), 2000);
 	}
 
-	/**
-	 * Clears all inputs and results
-	 */
 	function clear(): void {
 		inputValue = '';
 		binary = '';
@@ -92,9 +56,6 @@
 		error = null;
 	}
 
-	/**
-	 * Sets a sample value for demonstration
-	 */
 	function setSample(): void {
 		inputValue = '168898';
 		inputBase = 10;
@@ -177,7 +138,7 @@
 					<div class="text-xs text-muted-foreground/70">0-1</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(binary, 'binary')}
+					onclick={() => copy(binary, 'binary')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!binary}
@@ -205,7 +166,7 @@
 					<div class="text-xs text-muted-foreground/70">0-7</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(octal, 'octal')}
+					onclick={() => copy(octal, 'octal')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!octal}
@@ -233,7 +194,7 @@
 					<div class="text-xs text-muted-foreground/70">0-9</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(decimal, 'decimal')}
+					onclick={() => copy(decimal, 'decimal')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!decimal}
@@ -261,7 +222,7 @@
 					<div class="text-xs text-muted-foreground/70">0-9, A-F</div>
 				</div>
 				<button
-					onclick={() => copyToClipboard(hexadecimal, 'hexadecimal')}
+					onclick={() => copy(hexadecimal, 'hexadecimal')}
 					class="rounded-md p-1.5 transition-colors hover:bg-muted"
 					title="Copy"
 					disabled={!hexadecimal}

@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { Copy, RefreshCw, Trash2, Shield, Check, Eye, EyeOff } from '@lucide/svelte';
+	import { Copy, RefreshCw, Shield, Check, Eye, EyeOff } from '@lucide/svelte';
+	import { generatePassword as generatePasswordUtil } from './utils/password';
+	import { copyToClipboard } from './utils/copy';
 
 	let mode: 'generate' | 'test' = $state('generate');
 	let password = $state('');
@@ -15,16 +17,6 @@
 	let passwordHistory = $state<string[]>([]);
 	let copied = $state(false);
 
-	const UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	const LOWERCASE = 'abcdefghijklmnopqrstuvwxyz';
-	const NUMBERS = '0123456789';
-	const SYMBOLS = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-	const SIMILAR_CHARS = 'il1Lo0O';
-	const AMBIGUOUS_CHARS = '{}[]()/\\\'"`~,;:.<>';
-
-	/**
-	 * Calculates password strength based on length, character variety, and entropy
-	 */
 	function calculateStrength(pwd: string): {
 		score: number;
 		label: string;
@@ -83,121 +75,29 @@
 		return { score: 5, label: 'Very Strong', color: 'bg-green-600', percentage };
 	}
 
-	/**
-	 * Generates a cryptographically secure random password
-	 * Ensures at least one character from each selected character type
-	 */
 	function generatePassword(): void {
-		// Build charset from selected options
-		const charsets: string[] = [];
-		if (includeUppercase) charsets.push(UPPERCASE);
-		if (includeLowercase) charsets.push(LOWERCASE);
-		if (includeNumbers) charsets.push(NUMBERS);
-		if (includeSymbols) charsets.push(SYMBOLS);
+		password = generatePasswordUtil({
+			length,
+			uppercase: includeUppercase,
+			lowercase: includeLowercase,
+			numbers: includeNumbers,
+			symbols: includeSymbols,
+			excludeSimilar,
+			excludeAmbiguous
+		});
 
-		// Ensure at least one charset is selected
-		if (charsets.length === 0) {
-			charsets.push(LOWERCASE);
-			includeLowercase = true;
-		}
-
-		// Combine all charsets
-		let fullCharset = charsets.join('');
-
-		// Apply exclusions
-		if (excludeSimilar) {
-			fullCharset = fullCharset
-				.split('')
-				.filter((char) => !SIMILAR_CHARS.includes(char))
-				.join('');
-		}
-
-		if (excludeAmbiguous) {
-			fullCharset = fullCharset
-				.split('')
-				.filter((char) => !AMBIGUOUS_CHARS.includes(char))
-				.join('');
-		}
-
-		// Ensure we have enough characters
-		if (fullCharset.length === 0) {
-			fullCharset = LOWERCASE;
-		}
-
-		// Generate password ensuring at least one char from each selected type
-		const passwordArray: string[] = [];
-		const randomValues = new Uint32Array(length);
-		crypto.getRandomValues(randomValues);
-
-		// First, add one character from each selected charset
-		let index = 0;
-		for (const charset of charsets) {
-			let filteredCharset = charset;
-			if (excludeSimilar) {
-				filteredCharset = filteredCharset
-					.split('')
-					.filter((c) => !SIMILAR_CHARS.includes(c))
-					.join('');
-			}
-			if (excludeAmbiguous) {
-				filteredCharset = filteredCharset
-					.split('')
-					.filter((c) => !AMBIGUOUS_CHARS.includes(c))
-					.join('');
-			}
-			if (filteredCharset.length > 0 && index < length) {
-				passwordArray.push(filteredCharset[randomValues[index] % filteredCharset.length]);
-				index++;
-			}
-		}
-
-		// Fill the rest with random characters from full charset
-		for (let i = index; i < length; i++) {
-			passwordArray.push(fullCharset[randomValues[i] % fullCharset.length]);
-		}
-
-		// Shuffle the array to avoid predictable patterns
-		for (let i = passwordArray.length - 1; i > 0; i--) {
-			const j = randomValues[i] % (i + 1);
-			[passwordArray[i], passwordArray[j]] = [passwordArray[j], passwordArray[i]];
-		}
-
-		password = passwordArray.join('');
-
-		// Add to history if unique
 		if (password && !passwordHistory.includes(password)) {
 			passwordHistory = [password, ...passwordHistory].slice(0, 5);
 		}
 	}
 
-	/**
-	 * Copies password to clipboard with error handling
-	 */
-	async function copyToClipboard(text: string): Promise<void> {
+	async function copy(text: string) {
 		if (!text) return;
-
-		try {
-			await navigator.clipboard.writeText(text);
-			copied = true;
-			setTimeout(() => (copied = false), 2000);
-		} catch (err) {
-			// Fallback for browsers that don't support clipboard API
-			const textarea = document.createElement('textarea');
-			textarea.value = text;
-			textarea.style.position = 'fixed';
-			textarea.style.opacity = '0';
-			document.body.appendChild(textarea);
-			textarea.select();
-			document.execCommand('copy');
-			document.body.removeChild(textarea);
-			copied = true;
-			setTimeout(() => (copied = false), 2000);
-		}
+		await copyToClipboard(text);
+		copied = true;
+		setTimeout(() => (copied = false), 2000);
 	}
 
-	/**
-	 * Clears password and history
-	 */
 	function clear(): void {
 		password = '';
 		testPassword = '';
@@ -214,9 +114,6 @@
 		}, 150);
 	}
 
-	/**
-	 * Provides actionable suggestions to improve password strength
-	 */
 	function getSuggestions(pwd: string): string[] {
 		const suggestions: string[] = [];
 		if (!pwd) return ['Enter a password to test'];
@@ -232,7 +129,7 @@
 		// Check for common patterns
 		if (/^[0-9]+$/.test(pwd)) suggestions.push('Avoid only numbers');
 		if (/^[a-zA-Z]+$/.test(pwd)) suggestions.push('Mix letters with numbers/symbols');
-		if (/(.){2,}/.test(pwd)) suggestions.push('Avoid repeated characters');
+		if (/(.) {2,}/.test(pwd)) suggestions.push('Avoid repeated characters');
 		if (/^(123|abc|qwerty|password)/i.test(pwd)) suggestions.push('Avoid common patterns');
 
 		return suggestions;
@@ -325,7 +222,7 @@
 				/>
 				<div class="absolute right-2 top-1/2 flex -translate-y-1/2 gap-1">
 					<button
-						onclick={() => copyToClipboard(password)}
+						onclick={() => copy(password)}
 						disabled={!password}
 						class="rounded-md p-1.5 hover:bg-background disabled:opacity-50"
 						title="Copy"
@@ -383,7 +280,7 @@
 
 		{#if suggestions.length > 0}
 			<div class="flex flex-wrap gap-2">
-				{#each suggestions as suggestion}
+				{#each suggestions as suggestion (suggestion)}
 					<span class="text-xs text-red-500">• {suggestion}</span>
 				{/each}
 			</div>

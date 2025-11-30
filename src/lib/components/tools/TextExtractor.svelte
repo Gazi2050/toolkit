@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Upload, FileText, Copy, RefreshCw, AlertCircle, Loader2, Check } from '@lucide/svelte';
 	import Tesseract from 'tesseract.js';
+	import { copyToClipboard } from './utils/copy';
 
 	let file = $state<File | null>(null);
 	let previewUrl = $state<string | null>(null);
@@ -13,9 +14,6 @@
 	let fileType = $state<'image' | 'pdf' | null>(null);
 	let copied = $state(false);
 
-	/**
-	 * Dynamically imports pdfjs-dist and sets up the worker
-	 */
 	async function getPdfLib() {
 		const pdfjsLib = await import('pdfjs-dist');
 		pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
@@ -25,24 +23,15 @@
 		return pdfjsLib;
 	}
 
-	/**
-	 * Handles drag over event
-	 */
 	function handleDragOver(e: DragEvent): void {
 		e.preventDefault();
 		isDragging = true;
 	}
 
-	/**
-	 * Handles drag leave event
-	 */
 	function handleDragLeave(): void {
 		isDragging = false;
 	}
 
-	/**
-	 * Handles file drop event
-	 */
 	function handleDrop(e: DragEvent): void {
 		e.preventDefault();
 		isDragging = false;
@@ -52,9 +41,6 @@
 		}
 	}
 
-	/**
-	 * Handles file input change event
-	 */
 	function handleFileInput(e: Event): void {
 		const target = e.target as HTMLInputElement;
 		if (target.files && target.files[0]) {
@@ -62,10 +48,6 @@
 		}
 	}
 
-	/**
-	 * Processes the selected file and sets up preview
-	 * @param newFile - The file to process
-	 */
 	function handleFile(newFile: File): void {
 		const isImage = ['image/png', 'image/jpeg', 'image/webp'].includes(newFile.type);
 		const isPdf = newFile.type === 'application/pdf';
@@ -91,10 +73,6 @@
 		}
 	}
 
-	/**
-	 * Renders the first page of a PDF as a preview image
-	 * @param file - The PDF file
-	 */
 	async function renderPdfPreview(file: File): Promise<void> {
 		try {
 			const pdfjsLib = await getPdfLib();
@@ -120,9 +98,6 @@
 		}
 	}
 
-	/**
-	 * Extracts text from the loaded file (Image or PDF) using OCR
-	 */
 	async function extractText(): Promise<void> {
 		if (!file || !fileType) return;
 
@@ -194,20 +169,14 @@
 		}
 	}
 
-	/**
-	 * Copies extracted text to clipboard
-	 */
-	function copyText(): void {
+	async function copyText() {
 		if (extractedText) {
-			navigator.clipboard.writeText(extractedText);
+			await copyToClipboard(extractedText);
 			copied = true;
 			setTimeout(() => (copied = false), 2000);
 		}
 	}
 
-	/**
-	 * Clears all file data and results
-	 */
 	function clear(): void {
 		if (previewUrl) URL.revokeObjectURL(previewUrl);
 		file = null;

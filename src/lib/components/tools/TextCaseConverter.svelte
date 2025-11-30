@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { Copy, Check, RefreshCw, Type } from '@lucide/svelte';
+	import { Copy, Check, RefreshCw } from '@lucide/svelte';
+	import { copyToClipboard } from './utils/copy';
 
 	let input = $state('');
 	let copiedId = $state<string | null>(null);
 
-	/**
-	 * Converts text to snake_case
-	 */
 	function toSnakeCase(str: string): string {
 		return (
 			str
@@ -16,16 +14,10 @@
 		);
 	}
 
-	/**
-	 * Converts text to camelCase
-	 */
 	function toCamelCase(str: string): string {
 		return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
 	}
 
-	/**
-	 * Converts text to kebab-case
-	 */
 	function toKebabCase(str: string): string {
 		return (
 			str
@@ -35,9 +27,6 @@
 		);
 	}
 
-	/**
-	 * Converts text to Title Case
-	 */
 	function toTitleCase(str: string): string {
 		return str.replace(
 			/\w\S*/g,
@@ -45,34 +34,20 @@
 		);
 	}
 
-	/**
-	 * Converts text to UPPERCASE
-	 */
 	function toUpperCase(str: string): string {
 		return str.toUpperCase();
 	}
 
-	/**
-	 * Converts text to lowercase
-	 */
 	function toLowerCase(str: string): string {
 		return str.toLowerCase();
 	}
 
-	/**
-	 * Copies text to clipboard
-	 */
-	function copyToClipboard(text: string, id: string): void {
-		if (text) {
-			navigator.clipboard.writeText(text);
-			copiedId = id;
-			setTimeout(() => (copiedId = null), 2000);
-		}
+	async function copy(text: string, id: string) {
+		await copyToClipboard(text);
+		copiedId = id;
+		setTimeout(() => (copiedId = null), 2000);
 	}
 
-	/**
-	 * Clears the input
-	 */
 	function clear(): void {
 		input = '';
 	}
@@ -113,7 +88,7 @@
 			<div class="flex items-center justify-between">
 				<div class="text-sm font-medium text-muted-foreground">snake_case</div>
 				<button
-					onclick={() => copyToClipboard(snakeCase, 'snake')}
+					onclick={() => copy(snakeCase, 'snake')}
 					disabled={!snakeCase}
 					class="rounded-md p-1.5 transition-colors hover:bg-background disabled:opacity-50"
 					title="Copy"
@@ -141,7 +116,7 @@
 			<div class="flex items-center justify-between">
 				<div class="text-sm font-medium text-muted-foreground">camelCase</div>
 				<button
-					onclick={() => copyToClipboard(camelCase, 'camel')}
+					onclick={() => copy(camelCase, 'camel')}
 					disabled={!camelCase}
 					class="rounded-md p-1.5 transition-colors hover:bg-background disabled:opacity-50"
 					title="Copy"
@@ -169,7 +144,7 @@
 			<div class="flex items-center justify-between">
 				<div class="text-sm font-medium text-muted-foreground">kebab-case</div>
 				<button
-					onclick={() => copyToClipboard(kebabCase, 'kebab')}
+					onclick={() => copy(kebabCase, 'kebab')}
 					disabled={!kebabCase}
 					class="rounded-md p-1.5 transition-colors hover:bg-background disabled:opacity-50"
 					title="Copy"
@@ -197,7 +172,7 @@
 			<div class="flex items-center justify-between">
 				<div class="text-sm font-medium text-muted-foreground">Title Case</div>
 				<button
-					onclick={() => copyToClipboard(titleCase, 'title')}
+					onclick={() => copy(titleCase, 'title')}
 					disabled={!titleCase}
 					class="rounded-md p-1.5 transition-colors hover:bg-background disabled:opacity-50"
 					title="Copy"
@@ -225,7 +200,7 @@
 			<div class="flex items-center justify-between">
 				<div class="text-sm font-medium text-muted-foreground">UPPERCASE</div>
 				<button
-					onclick={() => copyToClipboard(upperCase, 'upper')}
+					onclick={() => copy(upperCase, 'upper')}
 					disabled={!upperCase}
 					class="rounded-md p-1.5 transition-colors hover:bg-background disabled:opacity-50"
 					title="Copy"
@@ -253,7 +228,7 @@
 			<div class="flex items-center justify-between">
 				<div class="text-sm font-medium text-muted-foreground">lowercase</div>
 				<button
-					onclick={() => copyToClipboard(lowerCase, 'lower')}
+					onclick={() => copy(lowerCase, 'lower')}
 					disabled={!lowerCase}
 					class="rounded-md p-1.5 transition-colors hover:bg-background disabled:opacity-50"
 					title="Copy"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowRightLeft, Copy, Trash2, Check } from '@lucide/svelte';
+	import { copyToClipboard } from './utils/copy';
 
 	let input = $state('');
 	let output = $state('');
@@ -15,10 +16,6 @@
 
 	const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
-	/**
-	 * Encodes a string to Base32
-	 * @param str - The input string
-	 */
 	function base32Encode(str: string): string {
 		const bytes = new TextEncoder().encode(str);
 		let bits = '';
@@ -38,10 +35,6 @@
 		return result;
 	}
 
-	/**
-	 * Decodes a Base32 string
-	 * @param str - The Base32 string
-	 */
 	function base32Decode(str: string): string {
 		str = str.toUpperCase().replace(/=+$/, '');
 		let bits = '';
@@ -62,20 +55,12 @@
 		return new TextDecoder().decode(new Uint8Array(bytes));
 	}
 
-	/**
-	 * Encodes a string to Hex (Base16)
-	 * @param str - The input string
-	 */
 	function hexEncode(str: string): string {
 		return Array.from(new TextEncoder().encode(str))
 			.map((byte) => byte.toString(16).padStart(2, '0'))
 			.join('');
 	}
 
-	/**
-	 * Decodes a Hex (Base16) string
-	 * @param str - The Hex string
-	 */
 	function hexDecode(str: string): string {
 		const hex = str.replace(/\s/g, '');
 		if (hex.length % 2 !== 0) {
@@ -93,9 +78,6 @@
 		return new TextDecoder().decode(new Uint8Array(bytes));
 	}
 
-	/**
-	 * Processes the input based on selected mode and method
-	 */
 	function process(): void {
 		try {
 			if (!input.trim()) {
@@ -146,29 +128,20 @@
 		}
 	}
 
-	/**
-	 * Clears all input, output, and error states
-	 */
 	function clear(): void {
 		input = '';
 		output = '';
 		error = null;
 	}
 
-	/**
-	 * Copies the output content to clipboard
-	 */
-	function copyToClipboard(): void {
+	async function copyOutput() {
 		if (output) {
-			navigator.clipboard.writeText(output);
+			await copyToClipboard(output);
 			copied = true;
 			setTimeout(() => (copied = false), 2000);
 		}
 	}
 
-	/**
-	 * Swaps input and output values and toggles mode
-	 */
 	function swap(): void {
 		const temp = input;
 		input = output;
@@ -176,18 +149,12 @@
 		mode = mode === 'encode' ? 'decode' : 'encode';
 	}
 
-	/**
-	 * Syncs scroll position of input line numbers
-	 */
 	function handleInputScroll(): void {
 		if (inputLinesElement && inputElement) {
 			inputLinesElement.scrollTop = inputElement.scrollTop;
 		}
 	}
 
-	/**
-	 * Syncs scroll position of output line numbers
-	 */
 	function handleOutputScroll(): void {
 		if (outputLinesElement && outputElement) {
 			outputLinesElement.scrollTop = outputElement.scrollTop;
@@ -299,7 +266,7 @@
 				</span>
 				<button
 					class="rounded-md p-1 hover:bg-muted"
-					onclick={copyToClipboard}
+					onclick={copyOutput}
 					title="Copy to clipboard"
 				>
 					{#if copied}

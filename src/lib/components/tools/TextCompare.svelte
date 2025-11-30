@@ -14,9 +14,6 @@
 	let outputElement: HTMLDivElement;
 	let outputLinesElement: HTMLDivElement;
 
-	/**
-	 * Calculates the difference between old and new text based on selected mode
-	 */
 	function calculateDiff(): void {
 		if (!oldText && !newText) {
 			diffResult = [];
@@ -36,36 +33,24 @@
 		}
 	}
 
-	/**
-	 * Clears all inputs and results
-	 */
 	function clear(): void {
 		oldText = '';
 		newText = '';
 		diffResult = [];
 	}
 
-	/**
-	 * Syncs scroll position of old text line numbers
-	 */
 	function handleOldTextScroll(): void {
 		if (oldTextLinesElement && oldTextElement) {
 			oldTextLinesElement.scrollTop = oldTextElement.scrollTop;
 		}
 	}
 
-	/**
-	 * Syncs scroll position of new text line numbers
-	 */
 	function handleNewTextScroll(): void {
 		if (newTextLinesElement && newTextElement) {
 			newTextLinesElement.scrollTop = newTextElement.scrollTop;
 		}
 	}
 
-	/**
-	 * Syncs scroll position of output line numbers
-	 */
 	function handleOutputScroll(): void {
 		if (outputLinesElement && outputElement) {
 			outputLinesElement.scrollTop = outputElement.scrollTop;

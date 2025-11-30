@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Copy, Maximize, Minimize, Check } from '@lucide/svelte';
+	import { copyToClipboard } from './utils/copy';
 
 	let input = $state('');
 	let output = $state('');
@@ -13,11 +14,6 @@
 	let outputElement = $state<HTMLPreElement | null>(null);
 	let outputLinesElement = $state<HTMLDivElement | null>(null);
 
-	/**
-	 * Parses error message to extract line and column numbers and creates a code snippet
-	 * @param e - The error object
-	 * @param json - The input JSON string
-	 */
 	function getErrorDetails(e: Error, json: string) {
 		const msg = e.message;
 		let line = 0;
@@ -47,9 +43,6 @@
 		return { message: msg, line, column, snippet };
 	}
 
-	/**
-	 * Formats the input JSON string with 2-space indentation
-	 */
 	function formatJSON(): void {
 		try {
 			if (!input.trim()) {
@@ -66,9 +59,6 @@
 		}
 	}
 
-	/**
-	 * Minifies the input JSON string by removing whitespace
-	 */
 	function minifyJSON(): void {
 		try {
 			if (!input.trim()) {
@@ -85,38 +75,26 @@
 		}
 	}
 
-	/**
-	 * Clears all input, output, and error states
-	 */
 	function clear(): void {
 		input = '';
 		output = '';
 		error = null;
 	}
 
-	/**
-	 * Copies the output content to clipboard
-	 */
-	function copyToClipboard(): void {
+	async function copyOutput() {
 		if (output) {
-			navigator.clipboard.writeText(output);
+			await copyToClipboard(output);
 			copied = true;
 			setTimeout(() => (copied = false), 2000);
 		}
 	}
 
-	/**
-	 * Syncs scroll position of input line numbers with textarea
-	 */
 	function handleInputScroll(): void {
 		if (inputLinesElement && inputElement) {
 			inputLinesElement.scrollTop = inputElement.scrollTop;
 		}
 	}
 
-	/**
-	 * Syncs scroll position of output line numbers with pre element
-	 */
 	function handleOutputScroll(): void {
 		if (outputLinesElement && outputElement) {
 			outputLinesElement.scrollTop = outputElement.scrollTop;
@@ -186,7 +164,7 @@
 				<div class="flex gap-2">
 					<button
 						class="rounded-md p-1 hover:bg-muted"
-						onclick={copyToClipboard}
+						onclick={copyOutput}
 						title="Copy to clipboard"
 					>
 						{#if copied}

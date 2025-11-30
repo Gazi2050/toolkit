@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Copy, RefreshCw, AlertCircle, Check } from '@lucide/svelte';
+	import { testRegex as testRegexUtil } from './utils/regex';
+	import { copyToClipboard } from './utils/copy';
 
 	let pattern = $state('');
 	let testString = $state('');
@@ -36,17 +38,10 @@
 		{ name: 'Hex Color', pattern: '#[0-9A-Fa-f]{6}' }
 	];
 
-	/**
-	 * Toggles the state of a regex flag
-	 * @param key - The flag key (e.g., 'g', 'i')
-	 */
 	function toggleFlag(key: string): void {
 		activeFlags[key as keyof typeof activeFlags] = !activeFlags[key as keyof typeof activeFlags];
 	}
 
-	/**
-	 * Constructs the flags string for RegExp constructor
-	 */
 	function getFlagsString(): string {
 		return (
 			Object.entries(activeFlags)
@@ -58,52 +53,29 @@
 		);
 	}
 
-	/**
-	 * Tests the regex pattern against the test string
-	 */
 	function testRegex(): void {
-		try {
-			if (!pattern || !testString) {
-				matches = [];
-				error = null;
-				return;
-			}
-
-			const flagsStr = getFlagsString();
-			const regex = new RegExp(pattern, flagsStr);
-
+		if (!pattern || !testString) {
 			matches = [];
-			if (activeFlags.g) {
-				let match;
-				while ((match = regex.exec(testString)) !== null) {
-					matches.push(match);
-					if (match.index === regex.lastIndex) {
-						regex.lastIndex++;
-					}
-				}
-			} else {
-				const match = regex.exec(testString);
-				if (match) matches.push(match);
-			}
-
 			error = null;
-		} catch (e) {
-			error = (e as Error).message;
+			return;
+		}
+
+		const flagsStr = getFlagsString();
+		const result = testRegexUtil(pattern, testString, flagsStr);
+
+		if (result.error) {
+			error = result.error;
 			matches = [];
+		} else {
+			error = null;
+			matches = result.execMatches || [];
 		}
 	}
 
-	/**
-	 * Loads a common pattern into the input
-	 * @param patternStr - The regex pattern string
-	 */
 	function loadPattern(patternStr: string): void {
 		pattern = patternStr;
 	}
 
-	/**
-	 * Clears all inputs and results
-	 */
 	function clear(): void {
 		pattern = '';
 		testString = '';
@@ -111,13 +83,10 @@
 		error = null;
 	}
 
-	/**
-	 * Copies the full regex pattern (including flags) to clipboard
-	 */
-	function copyPattern(): void {
+	async function copyPattern() {
 		if (pattern) {
 			const flagsStr = getFlagsString();
-			navigator.clipboard.writeText(`/${pattern}/${flagsStr}`);
+			await copyToClipboard(`/${pattern}/${flagsStr}`);
 			copied = true;
 			setTimeout(() => (copied = false), 2000);
 		}

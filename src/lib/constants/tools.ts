@@ -1,4 +1,14 @@
-import { FileJson, GitCompare, Lock, Binary, Code2, ScanText, KeyRound, Type } from '@lucide/svelte';
+import {
+	FileJson,
+	GitCompare,
+	Lock,
+	Binary,
+	Code2,
+	ScanText,
+	KeyRound,
+	Type,
+	Globe
+} from '@lucide/svelte';
 import type { Tool } from '$lib/types';
 
 /**
@@ -52,5 +62,11 @@ export const TOOLS: Tool[] = [
 		description: 'Convert text between snake_case, camelCase, kebab-case, and more.',
 		icon: Type,
 		href: '/text-case-converter'
+	},
+	{
+		title: 'Time Zone Converter',
+		description: 'Convert times between global time zones with ISO and UTC formats.',
+		icon: Globe,
+		href: '/time-zone-converter'
 	}
 ];
