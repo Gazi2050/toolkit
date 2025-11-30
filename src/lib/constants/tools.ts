@@ -1,4 +1,4 @@
-import { FileJson, GitCompare, Lock, Binary, Code2, ScanText } from '@lucide/svelte';
+import { FileJson, GitCompare, Lock, Binary, Code2, ScanText, KeyRound } from '@lucide/svelte';
 import type { Tool } from '$lib/types';
 
 /**
@@ -40,5 +40,11 @@ export const TOOLS: Tool[] = [
 		description: 'Extract text from images using OCR technology.',
 		icon: ScanText,
 		href: '/text-extractor'
+	},
+	{
+		title: 'Password Generator',
+		description: 'Generate secure passwords with customizable options and strength indicators.',
+		icon: KeyRound,
+		href: '/password-generator'
 	}
 ];

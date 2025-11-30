@@ -1,4 +1,4 @@
-import { FileJson, GitCompare, Lock, Binary, Code2, ScanText } from '@lucide/svelte';
+import { FileJson, GitCompare, Lock, Binary, Code2, ScanText, KeyRound } from '@lucide/svelte';
 import type { MenuItem } from '$lib/types';
 
 /**
@@ -10,5 +10,6 @@ export const MENU_ITEMS: MenuItem[] = [
 	{ title: 'Text Encryption', href: '/text-encryption', icon: Lock },
 	{ title: 'Number Base Converter', href: '/number-base', icon: Binary },
 	{ title: 'Regex Tester', href: '/regex-tester', icon: Code2 },
-	{ title: 'Text Extractor', href: '/text-extractor', icon: ScanText }
+	{ title: 'Text Extractor', href: '/text-extractor', icon: ScanText },
+	{ title: 'Password Generator', href: '/password-generator', icon: KeyRound }
 ];

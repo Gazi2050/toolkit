@@ -5,5 +5,6 @@ export const ROUTES = {
 	TEXT_ENCRYPTION: '/text-encryption',
 	NUMBER_BASE: '/number-base',
 	REGEX_TESTER: '/regex-tester',
-	TEXT_EXTRACTOR: '/text-extractor'
+	TEXT_EXTRACTOR: '/text-extractor',
+	PASSWORD_GENERATOR: '/password-generator'
 } as const;
