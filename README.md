@@ -7,9 +7,6 @@ Welcome to **Toolkit**, a lightweight and lightning-fast web platform providing 
 * 🛠️ **No Backend Required**
   All logic is handled within Svelte — no separate backend needed.
 
-* 🤖 **AI Powered**
-  Integrates powerful AI models for tools like OCR and text processing.
-
 * ⚡ **Instant Access**
   Use all tools immediately — no sign-up or login necessary.
 
@@ -53,9 +50,3 @@ Get **Toolkit** running locally in just a few steps:
 
 4. **Open your browser and navigate to:**
    [http://localhost:5173](http://localhost:5173) 🎉
-
-## 💻 Tech Stack
-
-* **Framework:** SvelteKit (TypeScript)
-* **Styling:** Tailwind CSS
-* **Libraries:** Tesseract.js, PDF.js
