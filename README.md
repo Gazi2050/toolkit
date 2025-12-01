@@ -13,7 +13,7 @@ Welcome to **Toolkit**, a **lightweight**, **fast**, and **easy-to-use** platfor
 * 🎨 **Clean & Intuitive Interface**  
   Designed for a smooth and enjoyable user experience.
 
-* 🌍 **Lightweight & Fast**  
+* 🪶 **Lightweight & Fast**  
   Loads quickly and works smoothly on any device.
 
 ## 🛠️ Available Tools
