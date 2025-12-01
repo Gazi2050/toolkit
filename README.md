@@ -1,49 +1,61 @@
-# Free Tools Website
+# ⚡ Toolkit — Free & Simple Developer Tools 🌐
 
-A **lightweight web platform** providing **free, no-signup tools** for all users. Some tools integrate **AI** for enhanced functionality.
-The full stack is built with **Svelte** using **TypeScript**, **ShadCN-Svelte**, and **Tailwind CSS**.
-All backend logic is handled within Svelte itself — **no separate backend** is required.
+Welcome to **Toolkit**, a lightweight and lightning-fast web platform providing free, no-signup tools for all users.
 
----
+## 🔑 Key Features
 
-## Initial Tool List
+* 🛠️ **No Backend Required**
+  All logic is handled within Svelte — no separate backend needed.
 
-Here are the tools currently available on the platform:
+* 🤖 **AI Powered**
+  Integrates powerful AI models for tools like OCR and text processing.
 
-- **JSON Viewer**
-  Format, validate, and beautify JSON data for easier reading and editing.
+* ⚡ **Instant Access**
+  Use all tools immediately — no sign-up or login necessary.
 
-- **Text Compare**
-  Compare two blocks of text and highlight differences, similar to GitHub’s diff tool.
+* 🎨 **Modern UI**
+  Built with Svelte and Tailwind CSS for a premium look and feel.
 
-- **Text Encoder & Decoder**
-  Encode and decode text in multiple formats, including Base64, Base32, Base16, and URL encoding.
+## 🛠️ Available Tools
 
-- **URL Shortener**
-  Shorten and customize URLs.
-  Example: `[example.com](http://example.com)` ⇒ `https://toolkit.vercel.app/yb33d3`
+* **JSON Viewer:** Format and validate JSON data.
+* **Text Compare:** Diff two blocks of text.
+* **Text Extractor (OCR):** Extract text from images/PDFs.
+* **Regex Generator:** Create and test regular expressions.
+* **Number Base Converter:** Convert between binary, octal, decimal, hex.
+* **Mermaid Code Generator:** Create diagrams visually.
+* **Time Zone Converter:** Convert global times.
+* **Text Encoder/Decoder:** Base64, URL, etc.
+* **Text Case Converter:** Camel, Snake, Kebab, etc.
 
-- **Number Base Converter**
-  Convert numbers between binary, octal, decimal, hexadecimal, or custom numeric bases.
+## 🚀 Installation Guide
 
-- **Regex Generator & Tester**
-  Create, test, and validate regular expressions with real-time visual feedback.
+Get **Toolkit** running locally in just a few steps:
 
-- **Text Extractor (OCR)**
-  Extract text from images and PDF files using optical character recognition.
+1. **Clone the repository:**
 
-- **File Converter**
-  Convert files between formats such as PDF, DOCX, CSV, TXT, and more.
+   ```bash
+   git clone https://github.com/Gazi2050/toolkit.git
+   cd toolkit
+   ```
 
-- **Text Case Converter**
-  Convert text into various cases, including:
-  `snake_case`, `camelCase`, `kebab-case`, `Title Case`, `UPPERCASE`, and `lowercase`.
+2. **Install dependencies:**
 
-- **Mermaid Code Generator**
-  Create flowcharts, sequence diagrams, and other diagram types by generating MermaidJS code visually.
+   ```bash
+   pnpm install
+   ```
 
-- **Time Zone Converter**
-  Convert times between global time zones in a clean, developer-friendly format (ISO, UTC offsets, etc.).
+3. **Start the development server:**
 
-- **Curl Command Generator**
-  Convert API requests into `curl` commands automatically, including headers, methods, and payloads.
+   ```bash
+   pnpm dev
+   ```
+
+4. **Open your browser and navigate to:**
+   [http://localhost:5173](http://localhost:5173) 🎉
+
+## 💻 Tech Stack
+
+* **Framework:** SvelteKit (TypeScript)
+* **Styling:** Tailwind CSS
+* **Libraries:** Tesseract.js, PDF.js
