@@ -53,8 +53,3 @@ Follow these simple steps to run **Toolkit** locally:
 
 4. **Open your browser and visit:**
    [http://localhost:5173](http://localhost:5173) 🎉
-
----
-
-Toolkit is free, fast, and simple — **tools that just work**, anytime, anywhere.
-
