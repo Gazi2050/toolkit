@@ -18,15 +18,15 @@ Welcome to **Toolkit**, a **lightweight**, **fast**, and **easy-to-use** platfor
 
 ## 🛠️ Available Tools
 
-* **JSON Viewer** – Format, validate, and explore JSON effortlessly.  
-* **Text Compare** – Highlight differences between two blocks of text.  
-* **Text Extractor (OCR)** – Extract text from images or PDFs instantly.  
-* **Regex Generator** – Build and test patterns easily.  
-* **Number Base Converter** – Convert between binary, octal, decimal, and hex.  
-* **Mermaid Code Generator** – Visualize diagrams quickly and clearly.  
-* **Time Zone Converter** – Convert times across global time zones.  
-* **Text Encoder/Decoder** – Encode or decode text in Base64, URL, and other formats.  
-* **Text Case Converter** – Switch between CamelCase, snake_case, kebab-case, and more.  
+* **JSON Viewer** – Format, validate, and explore JSON effortlessly.
+* **Text Compare** – Highlight differences between two blocks of text.
+* **Text Extractor (OCR)** – Extract text from images or PDFs instantly.
+* **Regex Tester** – Build, test, and validate regular expressions.
+* **Number Base Converter** – Convert between binary, octal, decimal, and hex.
+* **Time Zone Converter** – Convert times across global time zones.
+* **Text Encoder/Decoder** – Encode or decode text in Base64, Hex, and more.
+* **Text Case Converter** – Switch between CamelCase, snake_case, kebab-case, and more.
+* **Password Generator** – Generate secure, random passwords with custom options.  
 
 ## 🚀 Getting Started (Local Use)
 
