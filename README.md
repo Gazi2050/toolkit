@@ -1,6 +1,6 @@
 # ⚡ Toolkit — Free & Simple Developer Tools 🌐
 
-Welcome to **Toolkit**, a **lightweight**, **fast**, and **easy-to-use** platform offering **free tools** with **no sign-up required**. Perfect for anyone who needs to work with text, data, or diagrams efficiently.  
+Welcome to **Toolkit**, a **lightweight**, **fast**, and **easy-to-use** platform offering **free tools** with **no sign-up required**. Perfect for anyone who needs to work with text or data efficiently. 
 
 ## 🔑 Key Features
 
